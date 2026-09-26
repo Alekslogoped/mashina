@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Машинка собирает предметы</title>
+  <title>Бесконечная дорога</title>
 
   <style>
     * {
@@ -16,99 +16,78 @@
       height: 100%;
       font-family: Arial, sans-serif;
       background: #eef6ff;
+      overflow: hidden;
     }
 
     body {
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 10px;
-    }
-
-    .game-wrapper {
-      width: min(1200px, 100%);
-    }
-
-    .top-panel {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-      font-size: 20px;
-      font-weight: bold;
     }
 
     #game {
       position: relative;
-      width: 100%;
+      width: min(1200px, 100vw);
       aspect-ratio: 16 / 9;
       overflow: hidden;
-      border-radius: 20px;
+      background: #98d985;
+    }
 
+    /* =========================
+       НЕБО / ФОН
+    ========================= */
+
+    .sky {
+      position: absolute;
+      inset: 0;
       background:
         linear-gradient(
-          #bfe8ff 0%,
-          #bfe8ff 58%,
-          #8fd17f 58%,
-          #8fd17f 100%
+          #bfeaff 0%,
+          #bfeaff 45%,
+          #8fd17c 45%,
+          #8fd17c 100%
         );
-
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      z-index: 0;
     }
 
     /* =========================
        ДОРОГА
     ========================= */
 
-    .road-svg {
+    #road {
       position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
+      left: 0;
+      bottom: 0;
+      width: 200%;
+      height: 56%;
       z-index: 1;
+
+      background:
+        repeating-linear-gradient(
+          90deg,
+          transparent 0 110px,
+          rgba(255,255,255,0.95) 110px 170px,
+          transparent 170px 280px
+        ),
+        #666;
     }
 
-    /* =========================
-       ПРЕДМЕТЫ
-    ========================= */
-
-    #itemsLayer {
+    #road::before,
+    #road::after {
+      content: "";
       position: absolute;
-      inset: 0;
-      z-index: 5;
-      pointer-events: none;
+      left: 0;
+      width: 100%;
+      height: 12px;
+      background: white;
     }
 
-    .item {
-      position: absolute;
-      transform: translate(-50%, -50%);
-
-      width: clamp(50px, 6vw, 85px);
-      height: clamp(50px, 6vw, 85px);
-
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      font-size: clamp(38px, 5vw, 70px);
-
-      transition:
-        transform 0.25s ease,
-        opacity 0.25s ease;
-
-      filter:
-        drop-shadow(
-          0 5px 4px
-          rgba(0,0,0,0.2)
-        );
+    #road::before {
+      top: 0;
     }
 
-    .item.collected {
-      transform:
-        translate(-50%, -50%)
-        scale(1.8);
-
-      opacity: 0;
+    #road::after {
+      bottom: 0;
     }
 
     /* =========================
@@ -117,465 +96,450 @@
 
     #car {
       position: absolute;
+      left: 18%;
+      top: 68%;
+      transform: translate(-50%, -50%);
+      z-index: 20;
 
-      width: clamp(75px, 8vw, 120px);
-      height: clamp(75px, 8vw, 120px);
+      width: 120px;
+      height: 100px;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #car span {
+      font-size: 95px;
+      line-height: 1;
+      filter: drop-shadow(0 8px 5px rgba(0,0,0,0.25));
+    }
+
+    /* =========================
+       ПРЕДМЕТЫ
+    ========================= */
+
+    .item {
+      position: absolute;
+      z-index: 10;
+
+      width: 75px;
+      height: 75px;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      font-size: 58px;
 
       transform: translate(-50%, -50%);
 
-      z-index: 10;
-
-      pointer-events: none;
+      transition:
+        opacity .2s ease,
+        transform .2s ease;
     }
 
-    #carEmoji {
-      font-size: clamp(60px, 8vw, 110px);
+    .item.collected {
+      opacity: 0;
+      transform:
+        translate(-50%, -50%)
+        scale(1.8);
+    }
 
-      line-height: 1;
+    /* =========================
+       ЗНАК
+    ========================= */
 
-      transform-origin: center;
+    .road-sign {
+      position: absolute;
+      z-index: 12;
 
-      filter:
-        drop-shadow(
-          0 7px 5px
-          rgba(0,0,0,0.25)
-        );
+      width: 90px;
+      height: 110px;
+
+      transform: translate(-50%, -50%);
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      font-size: 76px;
+    }
+
+    /* =========================
+       ПАНЕЛЬ
+    ========================= */
+
+    #hud {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      right: 16px;
+
+      display: flex;
+      justify-content: space-between;
+
+      z-index: 50;
+
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .panel {
+      background: rgba(255,255,255,0.9);
+      padding: 9px 16px;
+      border-radius: 20px;
     }
 
     /* =========================
        ПОДСКАЗКА
     ========================= */
 
-    .hint {
+    #hint {
       position: absolute;
-
       left: 50%;
-      top: 20px;
+      top: 70px;
 
       transform: translateX(-50%);
 
-      z-index: 20;
-
       background: rgba(255,255,255,0.9);
 
-      padding: 10px 18px;
+      padding: 8px 15px;
+      border-radius: 25px;
 
-      border-radius: 30px;
-
-      font-size: 18px;
+      z-index: 50;
 
       font-weight: bold;
-
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-
-      pointer-events: none;
     }
 
     /* =========================
-       КНОПКИ
+       СТАРТ / ФИНИШ
     ========================= */
 
-    .controls {
+    #overlay {
+      position: absolute;
+      inset: 0;
+
+      z-index: 100;
+
       display: flex;
       justify-content: center;
+      align-items: center;
 
-      margin-top: 15px;
+      background: rgba(0,0,0,0.28);
+    }
+
+    .card {
+      background: white;
+      border-radius: 25px;
+      padding: 30px 40px;
+      text-align: center;
+
+      box-shadow: 0 12px 35px rgba(0,0,0,.25);
+    }
+
+    .card h1 {
+      margin: 0 0 10px;
     }
 
     button {
+      margin-top: 15px;
+
       border: none;
+      border-radius: 999px;
 
-      padding: 14px 32px;
-
-      border-radius: 40px;
+      padding: 14px 30px;
 
       background: #2f80ed;
-
       color: white;
 
       font-size: 20px;
-
       font-weight: bold;
 
       cursor: pointer;
-
-      box-shadow:
-        0 7px 15px
-        rgba(47,128,237,0.3);
     }
-
-    button:hover {
-      transform: translateY(-2px);
-    }
-
-    button:disabled {
-      opacity: 0.5;
-      cursor: default;
-      transform: none;
-    }
-
-    /* =========================
-       ФИНАЛ
-    ========================= */
 
     #finish {
-      position: absolute;
-
-      inset: 0;
-
-      background: rgba(0,0,0,0.3);
-
       display: none;
-
-      align-items: center;
-      justify-content: center;
-
-      z-index: 50;
-    }
-
-    #finish.show {
-      display: flex;
-    }
-
-    .finish-card {
-      background: white;
-
-      padding: 30px 40px;
-
-      border-radius: 25px;
-
-      text-align: center;
-
-      box-shadow:
-        0 10px 35px
-        rgba(0,0,0,0.25);
-    }
-
-    .finish-title {
-      font-size: 36px;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-
-    .finish-text {
-      font-size: 20px;
-      margin-bottom: 20px;
-    }
-
-    @media (max-width: 700px) {
-
-      .top-panel {
-        font-size: 15px;
-      }
-
-      .hint {
-        font-size: 14px;
-        padding: 7px 12px;
-      }
-
-      button {
-        font-size: 17px;
-      }
-
     }
 
   </style>
 </head>
 
-
 <body>
 
+<div id="game">
 
-<div class="game-wrapper">
+  <div class="sky"></div>
 
+  <div id="road"></div>
 
-  <div class="top-panel">
+  <div id="hud">
 
-    <div>
-      Машинка собирает предметы
-    </div>
-
-    <div>
+    <div class="panel">
       Собрано:
-      <span id="score">0</span>
-      /
-      <span id="total">0</span>
+      <span id="score">0</span>/25
+    </div>
+
+    <div class="panel">
+      Участок:
+      <span id="section">1</span>/5
     </div>
 
   </div>
 
+  <div id="hint">
+    Управляй: ↑ ↓ и → для движения
+  </div>
 
-  <div id="game">
+  <div id="car">
+    <span>🚗</span>
+  </div>
 
+  <div id="objectsLayer"></div>
 
-    <div class="hint">
-      Управляй машинкой стрелками ← ↑ ↓ →
-    </div>
-
-
-    <!-- =========================
-         ДОРОГА
-    ========================= -->
-
-    <svg
-      class="road-svg"
-      viewBox="0 0 1600 900"
-      preserveAspectRatio="none"
-    >
-
-      <path
-        d="
-        M -100 650
-
-        C 180 640,
-          280 470,
-          520 520
-
-        S 850 720,
-          1100 560
-
-        S 1400 430,
-          1700 540
-        "
-
-        fill="none"
-
-        stroke="#666"
-
-        stroke-width="230"
-
-        stroke-linecap="round"
-      />
-
-
-      <path
-        d="
-        M -100 650
-
-        C 180 640,
-          280 470,
-          520 520
-
-        S 850 720,
-          1100 560
-
-        S 1400 430,
-          1700 540
-        "
-
-        fill="none"
-
-        stroke="white"
-
-        stroke-width="10"
-
-        stroke-dasharray="40 35"
-
-        stroke-linecap="round"
-      />
-
-    </svg>
-
-
-
-    <!-- =========================
-         ПРЕДМЕТЫ
-    ========================= -->
-
-    <div id="itemsLayer"></div>
-
-
-
-    <!-- =========================
-         МАШИНКА
-    ========================= -->
-
-    <div id="car">
-
-      <div id="carEmoji">
-        🚗
+  <!-- СТАРТ -->
+  <div id="overlay">
+    <div class="card">
+      <h1>Поехали!</h1>
+      <div>
+        Собери все 25 предметов.
       </div>
 
+      <button id="startBtn">
+        СТАРТ
+      </button>
     </div>
+  </div>
 
-
-
-    <!-- =========================
-         ФИНАЛ
-    ========================= -->
-
-    <div id="finish">
-
-      <div class="finish-card">
-
-        <div class="finish-title">
-          Молодец!
-        </div>
-
-        <div class="finish-text">
-          Все предметы собраны!
-        </div>
-
-        <button id="restartButton">
-          Играть ещё
-        </button>
-
+  <!-- ФИНИШ -->
+  <div id="finish">
+    <div class="card">
+      <h1>Молодец!</h1>
+      <div>
+        Ты собрал все предметы!
       </div>
 
+      <button id="restartBtn">
+        Играть ещё
+      </button>
     </div>
-
-
   </div>
-
-
-
-  <div class="controls">
-
-    <button id="startButton">
-      СТАРТ
-    </button>
-
-  </div>
-
 
 </div>
 
 
 <script>
 
-
 /* =========================
-   ЭЛЕМЕНТЫ
+   ОСНОВНЫЕ ЭЛЕМЕНТЫ
 ========================= */
 
 const game =
   document.getElementById("game");
 
+const road =
+  document.getElementById("road");
+
 const car =
   document.getElementById("car");
 
-const carEmoji =
-  document.getElementById("carEmoji");
-
-const itemsLayer =
-  document.getElementById("itemsLayer");
+const objectsLayer =
+  document.getElementById("objectsLayer");
 
 const scoreElement =
   document.getElementById("score");
 
-const totalElement =
-  document.getElementById("total");
+const sectionElement =
+  document.getElementById("section");
+
+const overlay =
+  document.getElementById("overlay");
 
 const finish =
   document.getElementById("finish");
 
-const startButton =
-  document.getElementById("startButton");
+const startBtn =
+  document.getElementById("startBtn");
 
-const restartButton =
-  document.getElementById("restartButton");
-
+const restartBtn =
+  document.getElementById("restartBtn");
 
 
 /* =========================
-   МАШИНКА
+   НАСТРОЙКИ
 ========================= */
 
-let carX = 100;
-let carY = 450;
+const TOTAL_SECTIONS = 5;
+
+const ITEMS_PER_SECTION = 5;
+
+const TOTAL_ITEMS =
+  TOTAL_SECTIONS *
+  ITEMS_PER_SECTION;
 
 
 /*
-Скорость движения.
-
-Можно менять:
-
-4 — медленно
-6 — нормально
-8 — быстрее
+Скорость прокрутки дороги
 */
 
-const speed = 6;
+const ROAD_SPEED = 5;
 
 
+/*
+Положение машины
+*/
 
-/* =========================
-   КЛАВИШИ
-========================= */
+let carY = 68;
+
+
+/*
+Текущий участок
+*/
+
+let currentSection = 1;
+
+
+/*
+Сколько собрано
+*/
+
+let score = 0;
+
+
+/*
+Игра запущена?
+*/
+
+let running = false;
+
+
+/*
+Прокрутка разметки дороги
+*/
+
+let roadOffset = 0;
+
+
+/*
+Клавиши
+*/
 
 const keys = {
-
-  ArrowLeft: false,
-
-  ArrowRight: false,
-
   ArrowUp: false,
-
-  ArrowDown: false
-
+  ArrowDown: false,
+  ArrowRight: false
 };
 
 
-
 /* =========================
-   ПРЕДМЕТЫ
+   ВСЕ 25 ПРЕДМЕТОВ
 ========================= */
 
-const itemsData = [
+/*
+Сейчас emoji для проверки.
 
-  {
-    x: 27,
-    y: 65,
-    icon: "🍎"
-  },
+Позже заменим на PNG.
+*/
 
-  {
-    x: 40,
-    y: 54,
-    icon: "⚽"
-  },
+const ALL_ITEMS = [
 
-  {
-    x: 56,
-    y: 66,
-    icon: "🧸"
-  },
+  "🍎","🍐","🍊","🍋","🍉",
 
-  {
-    x: 70,
-    y: 57,
-    icon: "🎈"
-  },
+  "⚽","🏀","🎾","🧸","🎈",
 
-  {
-    x: 86,
-    y: 55,
-    icon: "⭐"
-  }
+  "🚂","🚲","🚁","⛵","🚜",
+
+  "🐱","🐶","🐭","🐰","🦊",
+
+  "⭐","🌙","☀️","🌈","☁️"
 
 ];
 
 
-let items = [];
+/* =========================
+   АКТИВНЫЕ ОБЪЕКТЫ
+========================= */
 
-let score = 0;
-
-let gameStarted = false;
-
+let activeObjects = [];
 
 
 /* =========================
-   СОЗДАЁМ ПРЕДМЕТЫ
+   КЛАВИАТУРА
 ========================= */
 
-function createItems() {
+window.addEventListener(
+  "keydown",
+  (event) => {
 
-  itemsLayer.innerHTML = "";
+    if (event.key in keys) {
 
-  items = [];
+      event.preventDefault();
+
+      keys[event.key] = true;
+
+    }
+
+  }
+);
 
 
-  itemsData.forEach((data) => {
+window.addEventListener(
+  "keyup",
+  (event) => {
+
+    if (event.key in keys) {
+
+      event.preventDefault();
+
+      keys[event.key] = false;
+
+    }
+
+  }
+);
+
+
+/* =========================
+   СОЗДАНИЕ УЧАСТКА
+========================= */
+
+function createSection(sectionNumber) {
+
+  activeObjects = [];
+
+  objectsLayer.innerHTML = "";
+
+  const startIndex =
+    (sectionNumber - 1)
+    * ITEMS_PER_SECTION;
+
+
+  /*
+  Пять предметов распределяем
+  по дороге
+  */
+
+  const positions = [
+
+    { x: 42, y: 66 },
+
+    { x: 65, y: 74 },
+
+    { x: 88, y: 62 },
+
+    { x: 112, y: 72 },
+
+    { x: 137, y: 65 }
+
+  ];
+
+
+  for (
+    let i = 0;
+    i < ITEMS_PER_SECTION;
+    i++
+  ) {
 
     const element =
       document.createElement("div");
@@ -586,268 +550,105 @@ function createItems() {
 
 
     element.innerHTML =
-      data.icon;
+      ALL_ITEMS[
+        startIndex + i
+      ];
 
 
     element.style.left =
-      data.x + "%";
+      positions[i].x + "%";
 
 
     element.style.top =
-      data.y + "%";
+      positions[i].y + "%";
 
 
-    itemsLayer.appendChild(
+    objectsLayer.appendChild(
       element
     );
 
 
-    items.push({
+    activeObjects.push({
+
+      type: "item",
 
       element: element,
+
+      x: positions[i].x,
+
+      y: positions[i].y,
 
       collected: false
 
     });
 
-  });
-
-
-  totalElement.textContent =
-    items.length;
-
-}
-
-
-
-/* =========================
-   ПОЗИЦИЯ МАШИНКИ
-========================= */
-
-function updateCarPosition() {
-
-  car.style.left =
-    carX + "px";
-
-  car.style.top =
-    carY + "px";
-
-}
-
-
-
-/* =========================
-   НАЖАЛИ КЛАВИШУ
-========================= */
-
-window.addEventListener(
-  "keydown",
-
-  (event) => {
-
-    if (
-      event.key in keys
-    ) {
-
-      event.preventDefault();
-
-      keys[event.key] =
-        true;
-
-    }
-
   }
 
-);
 
+  /*
+  После пятого предмета —
+  дорожный знак
+  */
 
-
-/* =========================
-   ОТПУСТИЛИ КЛАВИШУ
-========================= */
-
-window.addEventListener(
-  "keyup",
-
-  (event) => {
-
-    if (
-      event.key in keys
-    ) {
-
-      event.preventDefault();
-
-      keys[event.key] =
-        false;
-
-    }
-
-  }
-
-);
-
-
-
-/* =========================
-   СТОЛКНОВЕНИЕ
-========================= */
-
-function checkCollision() {
-
-  const carRect =
-    car.getBoundingClientRect();
-
-
-  items.forEach((item) => {
-
-
-    if (
-      item.collected
-    ) {
-
-      return;
-
-    }
-
-
-    const itemRect =
-      item.element.getBoundingClientRect();
-
-
-
-    const collision = !(
-
-      carRect.right <
-      itemRect.left
-
-      ||
-
-      carRect.left >
-      itemRect.right
-
-      ||
-
-      carRect.bottom <
-      itemRect.top
-
-      ||
-
-      carRect.top >
-      itemRect.bottom
-
+  const sign =
+    document.createElement(
+      "div"
     );
 
 
-
-    if (
-      collision
-    ) {
+  sign.className =
+    "road-sign";
 
 
-      item.collected =
-        true;
+  sign.innerHTML =
+    "🚧";
 
 
-      item.element
-        .classList
-        .add(
-          "collected"
-        );
+  sign.style.left =
+    "158%";
 
 
-      score++;
+  sign.style.top =
+    "62%";
 
 
-      scoreElement.textContent =
-        score;
+  objectsLayer.appendChild(
+    sign
+  );
 
 
+  activeObjects.push({
 
-      /* =========================
-         ВСЁ СОБРАНО
-      ========================= */
+    type: "sign",
 
-      if (
-        score ===
-        items.length
-      ) {
+    element: sign,
 
+    x: 158,
 
-        setTimeout(
-          () => {
+    y: 62,
 
-
-            finish.classList
-              .add(
-                "show"
-              );
-
-
-            gameStarted =
-              false;
-
-
-          },
-
-          350
-        );
-
-      }
-
-    }
+    passed: false
 
   });
+
+
+  sectionElement.textContent =
+    sectionNumber;
 
 }
 
 
-
 /* =========================
-   ДВИЖЕНИЕ
+   ДВИЖЕНИЕ МАШИНЫ
 ========================= */
 
 function moveCar() {
-
-
-  if (
-    keys.ArrowLeft
-  ) {
-
-    carX -= speed;
-
-
-    /*
-    машина смотрит влево
-    */
-
-    carEmoji.style.transform =
-      "scaleX(-1)";
-
-  }
-
-
-  if (
-    keys.ArrowRight
-  ) {
-
-    carX += speed;
-
-
-    /*
-    машина смотрит вправо
-    */
-
-    carEmoji.style.transform =
-      "scaleX(1)";
-
-  }
-
 
   if (
     keys.ArrowUp
   ) {
 
-    carY -= speed;
+    carY -= 0.5;
 
   }
 
@@ -856,112 +657,335 @@ function moveCar() {
     keys.ArrowDown
   ) {
 
-    carY += speed;
+    carY += 0.5;
+
+  }
+
+
+  /*
+  Ограничиваем машинку
+  только областью дороги
+  */
+
+  carY =
+    Math.max(
+      52,
+      Math.min(
+        82,
+        carY
+      )
+    );
+
+
+  car.style.top =
+    carY + "%";
+
+}
+
+
+/* =========================
+   ДВИЖЕНИЕ ДОРОГИ
+========================= */
+
+function moveRoad() {
+
+  /*
+  Если ребёнок держит →
+  дорога движется быстрее.
+  Без → она чуть медленнее.
+  */
+
+  let speed =
+    ROAD_SPEED;
+
+
+  if (
+    keys.ArrowRight
+  ) {
+
+    speed = 7;
+
+  }
+
+
+  roadOffset -= speed;
+
+
+  road.style.backgroundPosition =
+    roadOffset + "px 0";
+
+
+  /*
+  Все предметы двигаются
+  справа налево
+  */
+
+  activeObjects.forEach(
+    object => {
+
+      object.x -=
+        speed * 0.018;
+
+
+      object.element.style.left =
+        object.x + "%";
+
+    }
+  );
+
+}
+
+
+/* =========================
+   СТОЛКНОВЕНИЕ
+========================= */
+
+function checkCollisions() {
+
+  const carRect =
+    car.getBoundingClientRect();
+
+
+  activeObjects.forEach(
+    object => {
+
+
+      /* =====================
+         ПРЕДМЕТ
+      ===================== */
+
+      if (
+        object.type === "item"
+      ) {
+
+
+        if (
+          object.collected
+        ) {
+
+          return;
+
+        }
+
+
+        const rect =
+          object.element
+            .getBoundingClientRect();
+
+
+        const collision = !(
+
+          carRect.right <
+          rect.left
+
+          ||
+
+          carRect.left >
+          rect.right
+
+          ||
+
+          carRect.bottom <
+          rect.top
+
+          ||
+
+          carRect.top >
+          rect.bottom
+
+        );
+
+
+        if (
+          collision
+        ) {
+
+
+          object.collected =
+            true;
+
+
+          object.element
+            .classList
+            .add(
+              "collected"
+            );
+
+
+          score++;
+
+
+          scoreElement.textContent =
+            score;
+
+        }
+
+      }
+
+
+      /* =====================
+         ЗНАК
+      ===================== */
+
+      if (
+        object.type === "sign"
+      ) {
+
+
+        if (
+          object.passed
+        ) {
+
+          return;
+
+        }
+
+
+        /*
+        Когда знак прошёл
+        левее машины
+        */
+
+        if (
+          object.x < 15
+        ) {
+
+
+          object.passed =
+            true;
+
+
+          nextSection();
+
+        }
+
+      }
+
+    }
+  );
+
+}
+
+
+/* =========================
+   СЛЕДУЮЩИЙ УЧАСТОК
+========================= */
+
+function nextSection() {
+
+
+  if (
+    currentSection <
+    TOTAL_SECTIONS
+  ) {
+
+
+    currentSection++;
+
+
+    createSection(
+      currentSection
+    );
+
+  }
+
+  else {
+
+
+    /*
+    Пятый участок закончен
+    */
+
+    if (
+      score >= TOTAL_ITEMS
+    ) {
+
+      endGame();
+
+    }
+
+    else {
+
+
+      /*
+      Даже если ребёнок
+      пропустил какие-то предметы,
+      пока просто завершаем.
+      Позже можем сделать возврат.
+      */
+
+      endGame();
+
+    }
 
   }
 
 }
 
 
-
 /* =========================
-   ГРАНИЦЫ ИГРЫ
+   ФИНИШ
 ========================= */
 
-function keepCarInsideGame() {
+function endGame() {
+
+  running = false;
 
 
-  const gameRect =
-    game.getBoundingClientRect();
+  finish.style.display =
+    "flex";
 
 
-  const carWidth =
-    car.offsetWidth;
+  finish.style.position =
+    "absolute";
 
 
-  const carHeight =
-    car.offsetHeight;
+  finish.style.inset =
+    "0";
 
 
-  const halfWidth =
-    carWidth / 2;
+  finish.style.zIndex =
+    "100";
 
 
-  const halfHeight =
-    carHeight / 2;
+  finish.style.justifyContent =
+    "center";
 
 
-
-  carX =
-    Math.max(
-
-      halfWidth,
-
-      Math.min(
-
-        gameRect.width -
-        halfWidth,
-
-        carX
-
-      )
-
-    );
+  finish.style.alignItems =
+    "center";
 
 
-
-  carY =
-    Math.max(
-
-      halfHeight,
-
-      Math.min(
-
-        gameRect.height -
-        halfHeight,
-
-        carY
-
-      )
-
-    );
+  finish.style.background =
+    "rgba(0,0,0,.3)";
 
 }
 
 
-
 /* =========================
-   ОСНОВНОЙ ЦИКЛ
+   ИГРОВОЙ ЦИКЛ
 ========================= */
 
-function gameLoop() {
-
+function loop() {
 
   if (
-    gameStarted
+    running
   ) {
-
 
     moveCar();
 
+    moveRoad();
 
-    keepCarInsideGame();
-
-
-    updateCarPosition();
-
-
-    checkCollision();
+    checkCollisions();
 
   }
 
 
   requestAnimationFrame(
-    gameLoop
+    loop
   );
 
 }
-
 
 
 /* =========================
@@ -970,162 +994,64 @@ function gameLoop() {
 
 function startGame() {
 
-
   score = 0;
+
+  currentSection = 1;
+
+  carY = 68;
+
+  roadOffset = 0;
 
 
   scoreElement.textContent =
     "0";
 
 
-  finish.classList.remove(
-    "show"
-  );
+  sectionElement.textContent =
+    "1";
 
 
-  createItems();
+  finish.style.display =
+    "none";
 
 
-
-  const gameRect =
-    game.getBoundingClientRect();
-
+  overlay.style.display =
+    "none";
 
 
-  /* старт слева */
-
-  carX =
-    gameRect.width *
-    0.08;
+  createSection(1);
 
 
-  carY =
-    gameRect.height *
-    0.72;
-
-
-
-  carEmoji.style.transform =
-    "scaleX(1)";
-
-
-  updateCarPosition();
-
-
-  gameStarted =
-    true;
-
-
-  startButton.disabled =
-    true;
+  running = true;
 
 }
 
 
-
 /* =========================
-   КНОПКА СТАРТ
+   КНОПКИ
 ========================= */
 
-startButton.addEventListener(
+startBtn.addEventListener(
   "click",
   startGame
 );
 
 
-
-/* =========================
-   ПОВТОР
-========================= */
-
-restartButton.addEventListener(
+restartBtn.addEventListener(
   "click",
-
-  () => {
-
-
-    startButton.disabled =
-      false;
-
-
-    startGame();
-
-  }
-
+  startGame
 );
 
 
-
 /* =========================
-   ИЗМЕНЕНИЕ РАЗМЕРА
+   ЗАПУСК ЦИКЛА
 ========================= */
-
-window.addEventListener(
-  "resize",
-
-  () => {
-
-
-    if (
-      !gameStarted
-    ) {
-
-
-      const gameRect =
-        game.getBoundingClientRect();
-
-
-      carX =
-        gameRect.width *
-        0.08;
-
-
-      carY =
-        gameRect.height *
-        0.72;
-
-
-      updateCarPosition();
-
-    }
-
-  }
-
-);
-
-
-
-/* =========================
-   ПЕРВЫЙ ЗАПУСК
-========================= */
-
-createItems();
-
-
-const firstGameRect =
-  game.getBoundingClientRect();
-
-
-carX =
-  firstGameRect.width *
-  0.08;
-
-
-carY =
-  firstGameRect.height *
-  0.72;
-
-
-updateCarPosition();
-
 
 requestAnimationFrame(
-  gameLoop
+  loop
 );
 
-
 </script>
-
 
 </body>
 </html>
