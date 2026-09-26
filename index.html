@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Машинка собирает предметы</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      font-family: Arial, sans-serif;
+      background: #eef6ff;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 10px;
+    }
+
+    .game-wrapper {
+      width: min(1200px, 100%);
+    }
+
+    .top-panel {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    #game {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      border-radius: 20px;
+
+      background:
+        linear-gradient(
+          #bfe8ff 0%,
+          #bfe8ff 58%,
+          #8fd17f 58%,
+          #8fd17f 100%
+        );
+
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    /* ДОРОГА */
+
+    .road-svg {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* ПРЕДМЕТЫ */
+
+    #itemsLayer {
+      position: absolute;
+      inset: 0;
+      z-index: 5;
+    }
+
+    .item {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      font-size: clamp(35px, 5vw, 70px);
+
+      transition:
+        transform 0.25s ease,
+        opacity 0.25s ease;
+
+      filter: drop-shadow(0 5px 4px rgba(0,0,0,0.2));
+    }
+
+    .item.collected {
+      transform:
+        translate(-50%, -50%)
+        scale(1.8);
+
+      opacity: 0;
+    }
+
+    /* МАШИНКА */
+
+    #car {
+      position: absolute;
+
+      width: 110px;
+      height: 110px;
+
+      transform:
+        translate(-50%, -50%);
+
+      z-index: 10;
+
+      pointer-events: none;
+    }
+
+    #carEmoji {
+      font-size: clamp(60px, 8vw, 110px);
+
+      transform-origin: center;
+
+      filter:
+        drop-shadow(
+          0 7px 5px
+          rgba(0,0,0,0.25)
+        );
+    }
+
+    /* КНОПКА */
+
+    .controls {
+      display: flex;
+      justify-content: center;
+
+      margin-top: 15px;
+    }
+
+    button {
+      border: none;
+
+      padding:
+        14px 32px;
+
+      border-radius:
+        40px;
+
+      background:
+        #2f80ed;
+
+      color:
+        white;
+
+      font-size:
+        20px;
+
+      font-weight:
+        bold;
+
+      cursor:
+        pointer;
+
+      box-shadow:
+        0 7px 15px
+        rgba(47,128,237,0.3);
+    }
+
+    button:hover {
+      transform:
+        translateY(-2px);
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+
+    /* ФИНАЛ */
+
+    #finish {
+      position: absolute;
+
+      inset: 0;
+
+      background:
+        rgba(0,0,0,0.3);
+
+      display: none;
+
+      align-items: center;
+      justify-content: center;
+
+      z-index: 50;
+    }
+
+    #finish.show {
+      display: flex;
+    }
+
+    .finish-card {
+      background: white;
+
+      padding:
+        30px 40px;
+
+      border-radius:
+        25px;
+
+      text-align:
+        center;
+
+      box-shadow:
+        0 10px 35px
+        rgba(0,0,0,0.25);
+    }
+
+    .finish-title {
+      font-size:
+        36px;
+
+      font-weight:
+        bold;
+
+      margin-bottom:
+        10px;
+    }
+
+    .finish-text {
+      font-size:
+        20px;
+
+      margin-bottom:
+        20px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="game-wrapper">
+
+  <div class="top-panel">
+
+    <div>
+      Машинка собирает предметы
+    </div>
+
+    <div>
+      Собрано:
+      <span id="score">0</span>
+      /
+      <span id="total">0</span>
+    </div>
+
+  </div>
+
+  <div id="game">
+
+    <!-- ДОРОГА -->
+
+    <svg
+      class="road-svg"
+      viewBox="0 0 1600 900"
+      preserveAspectRatio="none"
+    >
+
+      <!-- основная дорога -->
+
+      <path
+        id="roadPath"
+
+        d="
+        M -100 650
+
+        C 180 640,
+          280 470,
+          520 520
+
+        S 850 720,
+          1100 560
+
+        S 1400 430,
+          1700 540
+        "
+
+        fill="none"
+
+        stroke="#666"
+
+        stroke-width="220"
+
+        stroke-linecap="round"
+      />
+
+      <!-- белая разметка -->
+
+      <path
+
+        d="
+        M -100 650
+
+        C 180 640,
+          280 470,
+          520 520
+
+        S 850 720,
+          1100 560
+
+        S 1400 430,
+          1700 540
+        "
+
+        fill="none"
+
+        stroke="white"
+
+        stroke-width="10"
+
+        stroke-dasharray="40 35"
+
+        stroke-linecap="round"
+      />
+
+    </svg>
+
+    <!-- ПРЕДМЕТЫ -->
+
+    <div id="itemsLayer"></div>
+
+
+    <!-- МАШИНКА -->
+
+    <div id="car">
+
+      <div id="carEmoji">
+        🚗
+      </div>
+
+    </div>
+
+
+    <!-- ФИНАЛ -->
+
+    <div id="finish">
+
+      <div class="finish-card">
+
+        <div class="finish-title">
+          Молодец!
+        </div>
+
+        <div class="finish-text">
+          Машинка собрала все предметы.
+        </div>
+
+        <button id="restartButton">
+          Ещё раз
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="controls">
+
+    <button id="startButton">
+      СТАРТ
+    </button>
+
+  </div>
+
+</div>
+
+
+<script>
+
+const game =
+  document.getElementById("game");
+
+const car =
+  document.getElementById("car");
+
+const carEmoji =
+  document.getElementById("carEmoji");
+
+const roadPath =
+  document.getElementById("roadPath");
+
+const itemsLayer =
+  document.getElementById("itemsLayer");
+
+const scoreElement =
+  document.getElementById("score");
+
+const totalElement =
+  document.getElementById("total");
+
+const startButton =
+  document.getElementById("startButton");
+
+const restartButton =
+  document.getElementById("restartButton");
+
+const finish =
+  document.getElementById("finish");
+
+
+/* =========================
+
+   ПРЕДМЕТЫ
+
+   ========================= */
+
+const itemsData = [
+
+  {
+    progress: 0.18,
+    icon: "🍎"
+  },
+
+  {
+    progress: 0.34,
+    icon: "⚽"
+  },
+
+  {
+    progress: 0.52,
+    icon: "🧸"
+  },
+
+  {
+    progress: 0.70,
+    icon: "🎈"
+  },
+
+  {
+    progress: 0.86,
+    icon: "⭐"
+  }
+
+];
+
+
+let items = [];
+
+let score = 0;
+
+let running = false;
+
+let startTime = null;
+
+
+/*
+
+Скорость машинки.
+
+9000 = 9 секунд.
+
+Если хотите медленнее:
+
+12000
+
+15000
+
+*/
+
+const duration = 9000;
+
+
+
+/* =========================
+
+   МАСШТАБ
+
+   ========================= */
+
+function getScale() {
+
+  const rect =
+    game.getBoundingClientRect();
+
+  return {
+
+    x:
+      rect.width / 1600,
+
+    y:
+      rect.height / 900
+
+  };
+
+}
+
+
+
+/* =========================
+
+   ТОЧКА НА ДОРОГЕ
+
+   ========================= */
+
+function getRoadPoint(progress) {
+
+  const pathLength =
+    roadPath.getTotalLength();
+
+  const point =
+    roadPath.getPointAtLength(
+      pathLength *
+      progress
+    );
+
+  const scale =
+    getScale();
+
+  return {
+
+    x:
+      point.x *
+      scale.x,
+
+    y:
+      point.y *
+      scale.y
+
+  };
+
+}
+
+
+
+/* =========================
+
+   УГОЛ ДОРОГИ
+
+   ========================= */
+
+function getRoadAngle(progress) {
+
+  const pathLength =
+    roadPath.getTotalLength();
+
+  const current =
+    pathLength *
+    progress;
+
+  const delta =
+    pathLength *
+    0.004;
+
+  const p1 =
+    roadPath.getPointAtLength(
+
+      Math.max(
+        0,
+        current - delta
+      )
+
+    );
+
+  const p2 =
+    roadPath.getPointAtLength(
+
+      Math.min(
+        pathLength,
+        current + delta
+      )
+
+    );
+
+  const angle =
+    Math.atan2(
+
+      p2.y - p1.y,
+
+      p2.x - p1.x
+
+    )
+
+    * 180
+    / Math.PI;
+
+  return angle;
+
+}
+
+
+
+/* =========================
+
+   СОЗДАЁМ ПРЕДМЕТЫ
+
+   ========================= */
+
+function createItems() {
+
+  itemsLayer.innerHTML = "";
+
+  items = [];
+
+  itemsData.forEach(
+
+    (data, index) => {
+
+      const item =
+        document.createElement(
+          "div"
+        );
+
+      item.className =
+        "item";
+
+      item.innerHTML =
+        data.icon;
+
+      itemsLayer.appendChild(
+        item
+      );
+
+      items.push({
+
+        progress:
+          data.progress,
+
+        element:
+          item,
+
+        collected:
+          false
+
+      });
+
+    }
+
+  );
+
+  totalElement.textContent =
+    items.length;
+
+  positionItems();
+
+}
+
+
+
+/* =========================
+
+   РАССТАВЛЯЕМ ПРЕДМЕТЫ
+
+   ========================= */
+
+function positionItems() {
+
+  items.forEach(
+
+    item => {
+
+      const point =
+        getRoadPoint(
+          item.progress
+        );
+
+      item.element.style.left =
+        point.x + "px";
+
+      /*
+
+      предмет немного выше дороги
+
+      */
+
+      item.element.style.top =
+        point.y -
+        70 +
+        "px";
+
+    }
+
+  );
+
+}
+
+
+
+/* =========================
+
+   СБОР ПРЕДМЕТОВ
+
+   ========================= */
+
+function checkItems(
+  progress
+) {
+
+  items.forEach(
+
+    item => {
+
+      if (
+        item.collected
+      ) {
+
+        return;
+
+      }
+
+      const distance =
+
+        Math.abs(
+
+          progress -
+          item.progress
+
+        );
+
+
+      if (
+        distance <
+        0.025
+      ) {
+
+        item.collected =
+          true;
+
+        item.element
+          .classList
+          .add(
+            "collected"
+          );
+
+        score++;
+
+        scoreElement
+          .textContent =
+          score;
+
+      }
+
+    }
+
+  );
+
+}
+
+
+
+/* =========================
+
+   АНИМАЦИЯ МАШИНКИ
+
+   ========================= */
+
+function animate(
+  timestamp
+) {
+
+  if (
+    !running
+  ) {
+
+    return;
+
+  }
+
+
+  if (
+    startTime === null
+  ) {
+
+    startTime =
+      timestamp;
+
+  }
+
+
+  const elapsed =
+
+    timestamp -
+    startTime;
+
+
+  const progress =
+
+    Math.min(
+
+      elapsed /
+      duration,
+
+      1
+
+    );
+
+
+  const point =
+
+    getRoadPoint(
+      progress
+    );
+
+
+  const angle =
+
+    getRoadAngle(
+      progress
+    );
+
+
+  car.style.left =
+
+    point.x +
+    "px";
+
+
+  car.style.top =
+
+    point.y -
+    20 +
+    "px";
+
+
+  carEmoji.style.transform =
+
+    "rotate(" +
+    angle +
+    "deg)";
+
+
+  checkItems(
+    progress
+  );
+
+
+  if (
+    progress < 1
+  ) {
+
+    requestAnimationFrame(
+      animate
+    );
+
+  }
+
+  else {
+
+    running =
+      false;
+
+    finish.classList
+      .add(
+        "show"
+      );
+
+  }
+
+}
+
+
+
+/* =========================
+
+   СТАРТ
+
+   ========================= */
+
+function startGame() {
+
+  score = 0;
+
+  scoreElement
+    .textContent =
+    0;
+
+  finish.classList
+    .remove(
+      "show"
+    );
+
+  createItems();
+
+
+  running =
+    true;
+
+
+  startTime =
+    null;
+
+
+  startButton
+    .disabled =
+    true;
+
+
+  requestAnimationFrame(
+    animate
+  );
+
+}
+
+
+
+/* =========================
+
+   СБРОС
+
+   ========================= */
+
+function resetCar() {
+
+  const point =
+    getRoadPoint(
+      0.01
+    );
+
+
+  car.style.left =
+
+    point.x +
+    "px";
+
+
+  car.style.top =
+
+    point.y -
+    20 +
+    "px";
+
+
+  carEmoji.style.transform =
+
+    "rotate(" +
+    getRoadAngle(
+      0.01
+    ) +
+    "deg)";
+
+}
+
+
+
+/* =========================
+
+   КНОПКИ
+
+   ========================= */
+
+startButton.addEventListener(
+
+  "click",
+
+  startGame
+
+);
+
+
+restartButton.addEventListener(
+
+  "click",
+
+  () => {
+
+    startButton
+      .disabled =
+      false;
+
+    startGame();
+
+  }
+
+);
+
+
+
+/* =========================
+
+   ИЗМЕНЕНИЕ РАЗМЕРА
+
+   ========================= */
+
+window.addEventListener(
+
+  "resize",
+
+  () => {
+
+    positionItems();
+
+    if (
+      !running
+    ) {
+
+      resetCar();
+
+    }
+
+  }
+
+);
+
+
+/* =========================
+
+   ПЕРВЫЙ ЗАПУСК
+
+   ========================= */
+
+createItems();
+
+resetCar();
+
+</script>
+
+
+</body>
+</html>
