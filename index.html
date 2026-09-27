@@ -36,15 +36,19 @@ body {
   background: #dff3ff;
 }
 
-/* ПАНЕЛЬ */
+/* =========================
+   ПАНЕЛЬ
+========================= */
 
 #hud {
   position: absolute;
   top: 15px;
   left: 15px;
   right: 15px;
+
   display: flex;
   justify-content: space-between;
+
   z-index: 100;
   pointer-events: none;
 }
@@ -63,76 +67,228 @@ body {
   left: 50%;
   top: 65px;
   transform: translateX(-50%);
+
   z-index: 100;
+
   background: rgba(255,255,255,.94);
+
   padding: 8px 16px;
+
   border-radius: 25px;
+
   font-weight: bold;
   pointer-events: none;
   white-space: nowrap;
 }
 
-/* МИР */
+/* =========================
+   МИР
+========================= */
 
 #world {
   position: absolute;
+
   left: 0;
   top: 0;
-  width: 9600px;
+
+  width: 9000px;
   height: 100%;
+
   transform: translateX(0);
+
   will-change: transform;
 }
 
-/* 5 ФОНОВ ДОРОГИ */
+/* =========================
+   ФОНЫ ДОРОГИ
+========================= */
+
+/*
+1920px — ширина каждой картинки.
+
+Но следующий фон начинается
+раньше предыдущего на 150px.
+
+То есть участки перекрываются,
+и стык становится мягче.
+*/
 
 .road-section {
   position: absolute;
+
   top: 0;
+
   width: 1920px;
   height: 100%;
+
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% 100%;
+
+  background-position:
+    center center;
+
+  background-size:
+    100% 100%;
 }
+
+
+/* ПЕРВЫЙ */
 
 #road1 {
   left: 0;
-  background-image: url("items/road-01.png");
+
+  background-image:
+    url("items/road-01.png");
+
+  z-index: 1;
 }
+
+
+/* ВТОРОЙ */
 
 #road2 {
-  left: 1920px;
-  background-image: url("items/road-02.png");
+  left: 1770px;
+
+  background-image:
+    url("items/road-02.png");
+
+  z-index: 2;
+
+  /*
+  мягкое появление
+  слева
+  */
+
+  -webkit-mask-image:
+    linear-gradient(
+      to right,
+      transparent 0,
+      rgba(0,0,0,.25) 40px,
+      rgba(0,0,0,.65) 90px,
+      black 150px
+    );
+
+  mask-image:
+    linear-gradient(
+      to right,
+      transparent 0,
+      rgba(0,0,0,.25) 40px,
+      rgba(0,0,0,.65) 90px,
+      black 150px
+    );
 }
+
+
+/* ТРЕТИЙ */
 
 #road3 {
-  left: 3840px;
-  background-image: url("items/road-03.png");
+  left: 3540px;
+
+  background-image:
+    url("items/road-03.png");
+
+  z-index: 3;
+
+  -webkit-mask-image:
+    linear-gradient(
+      to right,
+      transparent 0,
+      rgba(0,0,0,.25) 40px,
+      rgba(0,0,0,.65) 90px,
+      black 150px
+    );
+
+  mask-image:
+    linear-gradient(
+      to right,
+      transparent 0,
+      rgba(0,0,0,.25) 40px,
+      rgba(0,0,0,.65) 90px,
+      black 150px
+    );
 }
+
+
+/* ЧЕТВЁРТЫЙ */
 
 #road4 {
-  left: 5760px;
-  background-image: url("items/road-04.png");
+  left: 5310px;
+
+  background-image:
+    url("items/road-04.png");
+
+  z-index: 4;
+
+  -webkit-mask-image:
+    linear-gradient(
+      to right,
+      transparent 0,
+      rgba(0,0,0,.25) 40px,
+      rgba(0,0,0,.65) 90px,
+      black 150px
+    );
+
+  mask-image:
+    linear-gradient(
+      to right,
+      transparent 0,
+      rgba(0,0,0,.25) 40px,
+      rgba(0,0,0,.65) 90px,
+      black 150px
+    );
 }
+
+
+/* ПЯТЫЙ */
 
 #road5 {
-  left: 7680px;
-  background-image: url("items/road-05.png");
+  left: 7080px;
+
+  background-image:
+    url("items/road-05.png");
+
+  z-index: 5;
+
+  -webkit-mask-image:
+    linear-gradient(
+      to right,
+      transparent 0,
+      rgba(0,0,0,.25) 40px,
+      rgba(0,0,0,.65) 90px,
+      black 150px
+    );
+
+  mask-image:
+    linear-gradient(
+      to right,
+      transparent 0,
+      rgba(0,0,0,.25) 40px,
+      rgba(0,0,0,.65) 90px,
+      black 150px
+    );
 }
 
-/* ПРЕДМЕТЫ */
+
+/* =========================
+   ПРЕДМЕТЫ
+========================= */
 
 .item {
   position: absolute;
+
   width: 82px;
   height: 82px;
+
   display: flex;
   justify-content: center;
   align-items: center;
+
   font-size: 60px;
-  transform: translate(-50%, -50%);
-  z-index: 20;
+
+  transform:
+    translate(-50%, -50%);
+
+  z-index: 30;
+
   transition:
     opacity .22s ease,
     transform .22s ease;
@@ -140,52 +296,76 @@ body {
 
 .item.collected {
   opacity: 0;
+
   transform:
     translate(-50%, -50%)
     scale(1.8);
 }
 
-/* ЗНАКИ */
+
+/* =========================
+   ЗНАКИ
+========================= */
 
 .sign {
   position: absolute;
+
   width: 90px;
   height: 110px;
-  transform: translate(-50%, -50%);
+
+  transform:
+    translate(-50%, -50%);
+
   display: flex;
   justify-content: center;
   align-items: center;
+
   font-size: 72px;
-  z-index: 25;
+
+  z-index: 35;
 }
 
-/* ФИНИШ */
+
+/* =========================
+   ФИНИШ
+========================= */
 
 .finish-flag {
   position: absolute;
-  left: 9380px;
-  top: 42%;
+
+  left: 8820px;
+
+  top: 39%;
+
   width: 120px;
   height: 300px;
-  z-index: 30;
+
+  z-index: 40;
 }
 
 .flag-pole {
   position: absolute;
+
   left: 15px;
   top: 20px;
+
   width: 10px;
   height: 260px;
+
   background: #444;
+
   border-radius: 5px;
 }
 
 .flag {
   position: absolute;
+
   left: 25px;
   top: 20px;
+
   width: 100px;
   height: 75px;
+
   border: 3px solid #222;
 
   background:
@@ -197,63 +377,102 @@ body {
     )
     0 0 / 32px 32px;
 
-  transform-origin: left center;
+  transform-origin:
+    left center;
+
   animation:
     flagWave
     1s ease-in-out infinite alternate;
 }
 
 @keyframes flagWave {
+
   from {
-    transform: skewY(-2deg);
+    transform:
+      skewY(-2deg);
   }
 
   to {
-    transform: skewY(4deg);
+    transform:
+      skewY(4deg);
   }
+
 }
 
-/* МАШИНКА */
+
+/* =========================
+   МАШИНКА
+========================= */
 
 #car {
   position: absolute;
+
   width: 180px;
   height: 125px;
+
+  /*
+  ВАЖНО:
+  теперь машина стартует
+  выше и стоит ближе
+  к центру дороги
+  */
+
   left: 180px;
-  top: 68%;
-  transform: translate(-50%, -50%);
+
+  top: 61%;
+
+  transform:
+    translate(-50%, -50%);
+
   z-index: 60;
+
   pointer-events: none;
 }
 
 #carInner {
   position: relative;
+
   width: 180px;
   height: 125px;
-  transform-origin: center center;
-  transition: transform .08s linear;
+
+  transform-origin:
+    center center;
+
+  transition:
+    transform .08s linear;
 }
+
 
 /* КОРПУС */
 
 #carBody {
   position: absolute;
+
   left: 0;
   top: 0;
+
   width: 180px;
   height: auto;
+
   z-index: 3;
+
   pointer-events: none;
 }
+
 
 /* КОЛЁСА */
 
 .wheel {
   position: absolute;
+
   width: 52px;
   height: 52px;
+
   z-index: 2;
-  transform-origin: 50% 50%;
+
+  transform-origin:
+    50% 50%;
+
   pointer-events: none;
 }
 
@@ -267,31 +486,43 @@ body {
   top: 68px;
 }
 
-/* САЛЮТ */
+
+/* =========================
+   САЛЮТ
+========================= */
 
 #fireworks {
   position: absolute;
+
   inset: 0;
+
   z-index: 190;
+
   pointer-events: none;
+
   overflow: hidden;
 }
 
 .firework-particle {
   position: absolute;
+
   width: 12px;
   height: 12px;
+
   border-radius: 50%;
+
   animation:
     fireworkExplosion
     900ms ease-out forwards;
 }
 
 @keyframes fireworkExplosion {
+
   0% {
     transform:
       translate(0,0)
       scale(1);
+
     opacity: 1;
   }
 
@@ -302,46 +533,79 @@ body {
         var(--dy)
       )
       scale(.2);
+
     opacity: 0;
   }
+
 }
 
-/* ОКНА */
+
+/* =========================
+   ОКНА
+========================= */
 
 .overlay {
   position: absolute;
+
   inset: 0;
+
   display: flex;
+
   justify-content: center;
   align-items: center;
-  background: rgba(0,0,0,.28);
+
+  background:
+    rgba(0,0,0,.28);
+
   z-index: 200;
 }
 
 .card {
   background: white;
+
   padding: 30px 40px;
+
   border-radius: 26px;
+
   text-align: center;
+
   box-shadow:
     0 12px 35px
     rgba(0,0,0,.25);
 }
 
 .card h1 {
-  margin: 0 0 10px;
+  margin:
+    0 0 10px;
 }
 
 button {
-  margin-top: 15px;
-  border: none;
-  border-radius: 999px;
-  padding: 14px 30px;
-  background: #2f80ed;
-  color: white;
-  font-size: 19px;
-  font-weight: bold;
-  cursor: pointer;
+  margin-top:
+    15px;
+
+  border:
+    none;
+
+  border-radius:
+    999px;
+
+  padding:
+    14px 30px;
+
+  background:
+    #2f80ed;
+
+  color:
+    white;
+
+  font-size:
+    19px;
+
+  font-weight:
+    bold;
+
+  cursor:
+    pointer;
 }
 
 #finish {
@@ -351,46 +615,94 @@ button {
 </style>
 </head>
 
+
 <body>
 
 <div id="game">
 
+
   <div id="hud">
 
     <div class="panel">
+
       Собрано:
-      <span id="score">0</span>/25
+
+      <span id="score">
+        0
+      </span>
+
+      /25
+
     </div>
+
 
     <div class="panel">
+
       Участок:
-      <span id="section">1</span>/5
+
+      <span id="section">
+        1
+      </span>
+
+      /5
+
     </div>
 
   </div>
 
+
   <div id="hint">
+
     ← назад · → вперёд · ↑ ↓ по дороге
+
   </div>
+
+
+  <!-- МИР -->
 
   <div id="world">
 
-    <div id="road1" class="road-section"></div>
-    <div id="road2" class="road-section"></div>
-    <div id="road3" class="road-section"></div>
-    <div id="road4" class="road-section"></div>
-    <div id="road5" class="road-section"></div>
+    <div
+      id="road1"
+      class="road-section">
+    </div>
+
+    <div
+      id="road2"
+      class="road-section">
+    </div>
+
+    <div
+      id="road3"
+      class="road-section">
+    </div>
+
+    <div
+      id="road4"
+      class="road-section">
+    </div>
+
+    <div
+      id="road5"
+      class="road-section">
+    </div>
+
 
     <div id="objectsLayer"></div>
 
+
     <div class="finish-flag">
+
       <div class="flag-pole"></div>
+
       <div class="flag"></div>
+
     </div>
 
   </div>
 
-  <!-- МАШИНКА -->
+
+  <!-- МАШИНА -->
 
   <div id="car">
 
@@ -420,7 +732,9 @@ button {
 
   </div>
 
+
   <div id="fireworks"></div>
+
 
   <!-- СТАРТ -->
 
@@ -447,6 +761,7 @@ button {
 
   </div>
 
+
   <!-- ФИНИШ -->
 
   <div
@@ -465,8 +780,15 @@ button {
       </div>
 
       <div>
+
         Собрано предметов:
-        <strong id="finishScore">25</strong>/25
+
+        <strong id="finishScore">
+          25
+        </strong>
+
+        /25
+
       </div>
 
       <button id="restartBtn">
@@ -477,12 +799,16 @@ button {
 
   </div>
 
+
 </div>
 
 
 <script>
 
-/* ЭЛЕМЕНТЫ */
+
+/* =========================
+   ЭЛЕМЕНТЫ
+========================= */
 
 const game =
 document.getElementById("game");
@@ -530,38 +856,63 @@ const restartBtn =
 document.getElementById("restartBtn");
 
 
-/* МИР */
+/* =========================
+   РАЗМЕРЫ УЧАСТКОВ
+========================= */
 
-const SECTION_WIDTH =
+/*
+1920 исходная ширина фона.
+
+Но реальный шаг между
+участками теперь 1770px,
+так как 150px перекрываем.
+*/
+
+const SECTION_IMAGE_WIDTH =
 1920;
+
+const SECTION_STEP =
+1770;
 
 const TOTAL_SECTIONS =
 5;
 
 const WORLD_WIDTH =
-SECTION_WIDTH *
-TOTAL_SECTIONS;
+SECTION_STEP * 4
++
+SECTION_IMAGE_WIDTH;
 
 
-/* СКОРОСТЬ */
+/* =========================
+   СКОРОСТЬ
+========================= */
 
 const SPEED_X =
 7;
 
 const SPEED_Y =
-0.4;
+0.32;
 
 const WHEEL_ROTATION_SPEED =
 9;
 
 
-/* ПОЛОЖЕНИЕ */
+/* =========================
+   ПОЛОЖЕНИЕ
+========================= */
 
 let carWorldX =
-220;
+250;
+
+
+/*
+61% — примерно центр
+асфальта первого фона
+*/
 
 let carY =
-68;
+61;
+
 
 let cameraX =
 0;
@@ -579,7 +930,9 @@ let wheelRotation =
 0;
 
 
-/* КЛАВИШИ */
+/* =========================
+   КЛАВИШИ
+========================= */
 
 const keys = {
 
@@ -649,7 +1002,9 @@ window.addEventListener(
 });
 
 
-/* ВРЕМЕННЫЕ ПРЕДМЕТЫ */
+/* =========================
+   ВРЕМЕННЫЕ ПРЕДМЕТЫ
+========================= */
 
 const ALL_ITEMS = [
 
@@ -690,7 +1045,9 @@ let itemObjects =
 [];
 
 
-/* СОЗДАЁМ ПРЕДМЕТЫ */
+/* =========================
+   СОЗДАЁМ ПРЕДМЕТЫ
+========================= */
 
 function createWorld() {
 
@@ -701,38 +1058,48 @@ function createWorld() {
   [];
 
 
+  /*
+  Положение предметов
+  внутри каждого участка.
+  */
+
+  const offsets = [
+
+    330,
+    650,
+    980,
+    1310,
+    1580
+
+  ];
+
+
+  /*
+  Чуть ближе к дороге.
+  */
+
+  const yPositions = [
+
+    57,
+    64,
+    59,
+    65,
+    58
+
+  ];
+
+
   for (
     let section = 0;
     section < TOTAL_SECTIONS;
     section++
   ) {
 
+
     const sectionStart =
 
     section *
-    SECTION_WIDTH;
-
-
-    const offsets = [
-
-      360,
-      690,
-      1020,
-      1350,
-      1650
-
-    ];
-
-
-    const yPositions = [
-
-      61,
-      70,
-      64,
-      72,
-      62
-
-    ];
+    SECTION_STEP;
 
 
     for (
@@ -740,6 +1107,7 @@ function createWorld() {
       i < 5;
       i++
     ) {
+
 
       const index =
 
@@ -801,10 +1169,13 @@ function createWorld() {
     }
 
 
+    /* знак между участками */
+
     if (
       section <
       TOTAL_SECTIONS - 1
     ) {
+
 
       const sign =
 
@@ -825,15 +1196,13 @@ function createWorld() {
 
       sectionStart
       +
-      SECTION_WIDTH
-      -
-      100
+      1690
       +
       "px";
 
 
       sign.style.top =
-      "61%";
+      "57%";
 
 
       objectsLayer.appendChild(
@@ -847,7 +1216,9 @@ function createWorld() {
 }
 
 
-/* ВРАЩЕНИЕ КОЛЁС */
+/* =========================
+   КОЛЁСА
+========================= */
 
 function rotateWheels(
 direction
@@ -872,7 +1243,9 @@ direction
 }
 
 
-/* ДВИЖЕНИЕ */
+/* =========================
+   ДВИЖЕНИЕ
+========================= */
 
 function moveCar() {
 
@@ -883,11 +1256,14 @@ function moveCar() {
     !keys.ArrowLeft
   ) {
 
+
     carWorldX +=
     SPEED_X;
 
+
     carInner.style.transform =
     "scaleX(1)";
+
 
     rotateWheels(1);
 
@@ -900,16 +1276,24 @@ function moveCar() {
     !keys.ArrowRight
   ) {
 
+
     carWorldX -=
     SPEED_X;
 
+
     carInner.style.transform =
     "scaleX(-1)";
+
 
     rotateWheels(-1);
 
   }
 
+
+  /*
+  РУЧНОЕ ДВИЖЕНИЕ
+  ВВЕРХ / ВНИЗ
+  */
 
   if (
     keys.ArrowUp
@@ -935,7 +1319,7 @@ function moveCar() {
 
   Math.max(
 
-    80,
+    90,
 
     Math.min(
 
@@ -949,15 +1333,21 @@ function moveCar() {
   );
 
 
+  /*
+  БОЛЕЕ УЗКИЙ ДИАПАЗОН,
+  ЧТОБЫ МАШИНА НЕ ЕЗДИЛА
+  ПО НЕБУ И ТРАВЕ.
+  */
+
   carY =
 
   Math.max(
 
-    48,
+    50,
 
     Math.min(
 
-      82,
+      70,
 
       carY
 
@@ -968,7 +1358,9 @@ function moveCar() {
 }
 
 
-/* КАМЕРА */
+/* =========================
+   КАМЕРА
+========================= */
 
 function updateCamera() {
 
@@ -980,7 +1372,7 @@ function updateCamera() {
   const desiredScreenX =
 
   gameWidth *
-  0.32;
+  .32;
 
 
   cameraX =
@@ -1032,7 +1424,9 @@ function updateCamera() {
 }
 
 
-/* УЧАСТОК */
+/* =========================
+   УЧАСТОК
+========================= */
 
 function updateSection() {
 
@@ -1042,7 +1436,7 @@ function updateSection() {
   Math.floor(
 
     carWorldX /
-    SECTION_WIDTH
+    SECTION_STEP
 
   )
   +
@@ -1072,7 +1466,9 @@ function updateSection() {
 }
 
 
-/* СБОР ПРЕДМЕТОВ */
+/* =========================
+   СБОР
+========================= */
 
 function checkItems() {
 
@@ -1153,7 +1549,9 @@ function checkItems() {
 }
 
 
-/* САЛЮТ */
+/* =========================
+   САЛЮТ
+========================= */
 
 function createFirework(
 x,
@@ -1320,7 +1718,9 @@ function launchFireworks() {
 }
 
 
-/* ФИНИШ */
+/* =========================
+   ФИНИШ
+========================= */
 
 function checkFinish() {
 
@@ -1335,7 +1735,7 @@ function checkFinish() {
 
 
   const FINISH_X =
-  9380;
+  8820;
 
 
   if (
@@ -1377,7 +1777,9 @@ function checkFinish() {
 }
 
 
-/* ЦИКЛ */
+/* =========================
+   ЦИКЛ
+========================= */
 
 function gameLoop() {
 
@@ -1407,17 +1809,24 @@ function gameLoop() {
 }
 
 
-/* СТАРТ */
+/* =========================
+   СТАРТ
+========================= */
 
 function startGame() {
 
 
   carWorldX =
-  220;
+  250;
 
+
+  /*
+  машина сразу
+  стоит на дороге
+  */
 
   carY =
-  68;
+  61;
 
 
   cameraX =
