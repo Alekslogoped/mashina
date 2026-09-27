@@ -7,7 +7,6 @@
 <title>Машинка собирает предметы</title>
 
 <style>
-
 * {
   box-sizing: border-box;
 }
@@ -41,7 +40,7 @@ body {
 }
 
 /* =========================
-   ПАНЕЛЬ
+   HUD
 ========================= */
 
 #hud {
@@ -60,17 +59,11 @@ body {
 
 .panel {
   background: rgba(255,255,255,.94);
-
   padding: 9px 16px;
-
   border-radius: 22px;
-
   font-weight: bold;
   font-size: 18px;
-
-  box-shadow:
-    0 4px 12px
-    rgba(0,0,0,.14);
+  box-shadow: 0 4px 12px rgba(0,0,0,.14);
 }
 
 #hint {
@@ -79,28 +72,21 @@ body {
   left: 50%;
   top: 65px;
 
-  transform:
-    translateX(-50%);
+  transform: translateX(-50%);
 
   z-index: 100;
 
-  background:
-    rgba(255,255,255,.94);
+  background: rgba(255,255,255,.94);
 
-  padding:
-    8px 16px;
+  padding: 8px 16px;
 
-  border-radius:
-    25px;
+  border-radius: 25px;
 
-  font-weight:
-    bold;
+  font-weight: bold;
 
-  pointer-events:
-    none;
+  pointer-events: none;
 
-  white-space:
-    nowrap;
+  white-space: nowrap;
 }
 
 /* =========================
@@ -116,15 +102,13 @@ body {
   width: 9000px;
   height: 100%;
 
-  transform:
-    translateX(0);
+  transform: translateX(0);
 
-  will-change:
-    transform;
+  will-change: transform;
 }
 
 /* =========================
-   ОСНОВНОЙ ФОН
+   ФОН
 ========================= */
 
 #roadBackground {
@@ -135,23 +119,13 @@ body {
   width: 9000px;
   height: 100%;
 
-  background-image:
-    url("items/road-main.png");
+  background-image: url("items/road-main.png");
 
-  /*
-  ВАЖНО:
-  картинка сохраняет пропорции,
-  а не растягивается на 9000px
-  */
+  background-size: auto 100%;
 
-  background-size:
-    auto 100%;
+  background-repeat: repeat-x;
 
-  background-repeat:
-    repeat-x;
-
-  background-position:
-    left center;
+  background-position: left center;
 
   z-index: 1;
 }
@@ -172,8 +146,7 @@ body {
 
   font-size: 60px;
 
-  transform:
-    translate(-50%, -50%);
+  transform: translate(-50%, -50%);
 
   z-index: 30;
 
@@ -191,25 +164,102 @@ body {
 }
 
 /* =========================
-   ЗНАКИ
+   СВЕТОФОРЫ
 ========================= */
 
-.sign {
+.traffic-light {
   position: absolute;
 
-  width: 90px;
-  height: 110px;
+  width: 130px;
+
+  transform: translate(-50%, -50%);
+
+  z-index: 55;
+
+  cursor: pointer;
+
+  user-select: none;
+
+  transition:
+    transform .18s ease,
+    filter .18s ease;
+}
+
+.traffic-light:hover {
+  transform:
+    translate(-50%, -50%)
+    scale(1.06);
+}
+
+.traffic-light.ready {
+  animation:
+    trafficPulse
+    .9s ease-in-out
+    infinite alternate;
+}
+
+@keyframes trafficPulse {
+  from {
+    filter:
+      drop-shadow(
+        0 0 0 rgba(255,0,0,0)
+      );
+  }
+
+  to {
+    filter:
+      drop-shadow(
+        0 0 14px rgba(255,70,70,.85)
+      );
+  }
+}
+
+/* =========================
+   ПОДСКАЗКА У СВЕТОФОРА
+========================= */
+
+.traffic-message {
+  position: absolute;
 
   transform:
     translate(-50%, -50%);
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  z-index: 70;
 
-  font-size: 72px;
+  background:
+    rgba(255,255,255,.96);
 
-  z-index: 35;
+  padding:
+    8px 14px;
+
+  border-radius:
+    18px;
+
+  font-size:
+    17px;
+
+  font-weight:
+    bold;
+
+  box-shadow:
+    0 4px 12px
+    rgba(0,0,0,.16);
+
+  pointer-events:
+    none;
+
+  white-space:
+    nowrap;
+
+  opacity:
+    0;
+
+  transition:
+    opacity .2s ease;
+}
+
+.traffic-message.show {
+  opacity: 1;
 }
 
 /* =========================
@@ -237,11 +287,9 @@ body {
   width: 10px;
   height: 260px;
 
-  background:
-    #444;
+  background: #444;
 
-  border-radius:
-    5px;
+  border-radius: 5px;
 }
 
 .flag {
@@ -253,8 +301,7 @@ body {
   width: 100px;
   height: 75px;
 
-  border:
-    3px solid #222;
+  border: 3px solid #222;
 
   background:
     conic-gradient(
@@ -265,8 +312,7 @@ body {
     )
     0 0 / 32px 32px;
 
-  transform-origin:
-    left center;
+  transform-origin: left center;
 
   animation:
     flagWave
@@ -275,7 +321,6 @@ body {
 }
 
 @keyframes flagWave {
-
   from {
     transform:
       skewY(-2deg);
@@ -285,7 +330,6 @@ body {
     transform:
       skewY(4deg);
   }
-
 }
 
 /* =========================
@@ -299,11 +343,6 @@ body {
   height: 125px;
 
   left: 180px;
-
-  /*
-  Положение машины на дороге
-  */
-
   top: 66%;
 
   transform:
@@ -327,8 +366,6 @@ body {
     transform .08s linear;
 }
 
-/* КОРПУС */
-
 #carBody {
   position: absolute;
 
@@ -342,8 +379,6 @@ body {
 
   pointer-events: none;
 }
-
-/* КОЛЁСА */
 
 .wheel {
   position: absolute;
@@ -399,7 +434,6 @@ body {
 }
 
 @keyframes fireworkExplosion {
-
   0% {
     transform:
       translate(0,0)
@@ -418,7 +452,6 @@ body {
 
     opacity: 0;
   }
-
 }
 
 /* =========================
@@ -444,14 +477,11 @@ body {
 .card {
   background: white;
 
-  padding:
-    30px 40px;
+  padding: 30px 40px;
 
-  border-radius:
-    26px;
+  border-radius: 26px;
 
-  text-align:
-    center;
+  text-align: center;
 
   box-shadow:
     0 12px 35px
@@ -459,43 +489,32 @@ body {
 }
 
 .card h1 {
-  margin:
-    0 0 10px;
+  margin: 0 0 10px;
 }
 
 button {
-  margin-top:
-    15px;
+  margin-top: 15px;
 
-  border:
-    none;
+  border: none;
 
-  border-radius:
-    999px;
+  border-radius: 999px;
 
-  padding:
-    14px 30px;
+  padding: 14px 30px;
 
-  background:
-    #2f80ed;
+  background: #2f80ed;
 
-  color:
-    white;
+  color: white;
 
-  font-size:
-    19px;
+  font-size: 19px;
 
-  font-weight:
-    bold;
+  font-weight: bold;
 
-  cursor:
-    pointer;
+  cursor: pointer;
 }
 
 #finish {
   display: none;
 }
-
 </style>
 </head>
 
@@ -531,17 +550,16 @@ button {
 
     <div id="objectsLayer"></div>
 
+    <div id="trafficLayer"></div>
+
     <div class="finish-flag">
-
       <div class="flag-pole"></div>
-
       <div class="flag"></div>
-
     </div>
 
   </div>
 
-  <!-- МАШИНКА -->
+  <!-- МАШИНА -->
 
   <div id="car">
 
@@ -579,7 +597,6 @@ button {
     id="startOverlay"
     class="overlay"
   >
-
     <div class="card">
 
       <h1>
@@ -587,7 +604,7 @@ button {
       </h1>
 
       <div>
-        Собери все предметы и доедь до финиша.
+        Собери предметы и проезжай светофоры.
       </div>
 
       <button id="startBtn">
@@ -595,7 +612,6 @@ button {
       </button>
 
     </div>
-
   </div>
 
   <!-- ФИНИШ -->
@@ -604,7 +620,6 @@ button {
     id="finish"
     class="overlay"
   >
-
     <div class="card">
 
       <h1>
@@ -616,15 +631,11 @@ button {
       </div>
 
       <div>
-
         Собрано предметов:
-
         <strong id="finishScore">
           25
         </strong>
-
         /25
-
       </div>
 
       <button id="restartBtn">
@@ -632,7 +643,6 @@ button {
       </button>
 
     </div>
-
   </div>
 
 </div>
@@ -664,6 +674,9 @@ document.getElementById("wheelBack");
 const objectsLayer =
 document.getElementById("objectsLayer");
 
+const trafficLayer =
+document.getElementById("trafficLayer");
+
 const scoreElement =
 document.getElementById("score");
 
@@ -688,7 +701,6 @@ document.getElementById("startBtn");
 const restartBtn =
 document.getElementById("restartBtn");
 
-
 /* =========================
    МИР
 ========================= */
@@ -703,7 +715,6 @@ const SECTION_WIDTH =
 WORLD_WIDTH /
 TOTAL_SECTIONS;
 
-
 /* =========================
    СКОРОСТЬ
 ========================= */
@@ -716,7 +727,6 @@ const SPEED_Y =
 
 const WHEEL_ROTATION_SPEED =
 9;
-
 
 /* =========================
    ПОЛОЖЕНИЕ
@@ -743,31 +753,22 @@ false;
 let wheelRotation =
 0;
 
-
 /* =========================
    КЛАВИШИ
 ========================= */
 
 const keys = {
-
   ArrowLeft: false,
-
   ArrowRight: false,
-
   ArrowUp: false,
-
   ArrowDown: false
-
 };
-
 
 window.addEventListener(
 "keydown",
 event => {
 
-  if (
-    event.key in keys
-  ) {
+  if (event.key in keys) {
 
     event.preventDefault();
 
@@ -778,14 +779,11 @@ event => {
 
 });
 
-
 window.addEventListener(
 "keyup",
 event => {
 
-  if (
-    event.key in keys
-  ) {
+  if (event.key in keys) {
 
     event.preventDefault();
 
@@ -795,7 +793,6 @@ event => {
   }
 
 });
-
 
 window.addEventListener(
 "blur",
@@ -815,9 +812,8 @@ window.addEventListener(
 
 });
 
-
 /* =========================
-   25 ВРЕМЕННЫХ ПРЕДМЕТОВ
+   ВРЕМЕННЫЕ ПРЕДМЕТЫ
 ========================= */
 
 const ALL_ITEMS = [
@@ -854,13 +850,14 @@ const ALL_ITEMS = [
 
 ];
 
-
 let itemObjects =
 [];
 
+let trafficLights =
+[];
 
 /* =========================
-   СОЗДАЁМ ПРЕДМЕТЫ
+   ПРЕДМЕТЫ
 ========================= */
 
 function createWorld() {
@@ -870,7 +867,6 @@ function createWorld() {
 
   itemObjects =
   [];
-
 
   const offsets = [
 
@@ -882,7 +878,6 @@ function createWorld() {
 
   ];
 
-
   const yPositions = [
 
     62,
@@ -893,26 +888,22 @@ function createWorld() {
 
   ];
 
-
   for (
     let section = 0;
     section < TOTAL_SECTIONS;
     section++
   ) {
 
-
     const sectionStart =
 
     section *
     SECTION_WIDTH;
-
 
     for (
       let i = 0;
       i < 5;
       i++
     ) {
-
 
       const index =
 
@@ -921,21 +912,17 @@ function createWorld() {
       +
       i;
 
-
       const item =
 
       document.createElement(
         "div"
       );
 
-
       item.className =
       "item";
 
-
       item.innerHTML =
       ALL_ITEMS[index];
-
 
       const worldX =
 
@@ -943,23 +930,19 @@ function createWorld() {
       +
       offsets[i];
 
-
       item.style.left =
 
       worldX +
       "px";
-
 
       item.style.top =
 
       yPositions[i] +
       "%";
 
-
       objectsLayer.appendChild(
         item
       );
-
 
       itemObjects.push({
 
@@ -973,58 +956,284 @@ function createWorld() {
 
     }
 
+  }
+
+}
+
+/* =========================
+   СВЕТОФОРЫ
+========================= */
+
+function createTrafficLights() {
+
+  trafficLayer.innerHTML =
+  "";
+
+  trafficLights =
+  [];
+
+  /*
+  4 границы между
+  5 участками
+  */
+
+  for (
+    let i = 1;
+    i < TOTAL_SECTIONS;
+    i++
+  ) {
+
+    const trafficX =
+
+    i *
+    SECTION_WIDTH;
+
+    const img =
+
+    document.createElement(
+      "img"
+    );
+
+    img.className =
+    "traffic-light";
+
+    img.src =
+    "items/traffic-red.png";
+
+    img.alt =
+    "Светофор";
+
+    img.style.left =
+
+    trafficX +
+    "px";
 
     /*
-    ЗНАК ПОСЛЕ
-    КАЖДОЙ ПЯТЁРКИ
+    Ставим чуть выше дороги,
+    чтобы нижняя часть стояла
+    у края асфальта
     */
 
-    if (
-      section <
-      TOTAL_SECTIONS - 1
-    ) {
+    img.style.top =
+    "49%";
 
+    const message =
 
-      const sign =
+    document.createElement(
+      "div"
+    );
 
-      document.createElement(
-        "div"
+    message.className =
+    "traffic-message";
+
+    message.textContent =
+    "Нажми на светофор";
+
+    message.style.left =
+
+    trafficX +
+    "px";
+
+    message.style.top =
+    "30%";
+
+    trafficLayer.appendChild(
+      img
+    );
+
+    trafficLayer.appendChild(
+      message
+    );
+
+    const trafficObject = {
+
+      x:
+      trafficX,
+
+      green:
+      false,
+
+      element:
+      img,
+
+      message:
+      message
+
+    };
+
+    img.addEventListener(
+    "click",
+    () => {
+
+      /*
+      Разрешаем кликнуть
+      только если машинка
+      достаточно близко
+      */
+
+      const distance =
+
+      Math.abs(
+        carWorldX -
+        trafficX
       );
 
+      if (
+        distance <=
+        400
+      ) {
 
-      sign.className =
-      "sign";
+        trafficObject.green =
+        true;
 
+        img.src =
+        "items/traffic-green.png";
 
-      sign.innerHTML =
-      "🚧";
+        img.classList.remove(
+          "ready"
+        );
 
+        message.classList.remove(
+          "show"
+        );
 
-      sign.style.left =
+      }
 
-      sectionStart
-      +
-      SECTION_WIDTH
-      -
-      100
-      +
-      "px";
+    });
 
-
-      sign.style.top =
-      "62%";
-
-
-      objectsLayer.appendChild(
-        sign
-      );
-
-    }
+    trafficLights.push(
+      trafficObject
+    );
 
   }
 
 }
 
+/* =========================
+   ПРОВЕРКА СВЕТОФОРОВ
+========================= */
+
+function updateTrafficLights() {
+
+  trafficLights.forEach(
+  traffic => {
+
+    if (
+      traffic.green
+    ) {
+
+      traffic.element
+      .classList
+      .remove(
+        "ready"
+      );
+
+      traffic.message
+      .classList
+      .remove(
+        "show"
+      );
+
+      return;
+
+    }
+
+    const distance =
+
+    traffic.x -
+    carWorldX;
+
+    /*
+    Машинка подъезжает
+    к красному светофору
+    */
+
+    if (
+      distance > 0
+      &&
+      distance < 450
+    ) {
+
+      traffic.element
+      .classList
+      .add(
+        "ready"
+      );
+
+      traffic.message
+      .classList
+      .add(
+        "show"
+      );
+
+    }
+    else {
+
+      traffic.element
+      .classList
+      .remove(
+        "ready"
+      );
+
+      traffic.message
+      .classList
+      .remove(
+        "show"
+      );
+
+    }
+
+  });
+
+}
+
+/* =========================
+   МОЖНО ЛИ ЕХАТЬ ВПЕРЁД
+========================= */
+
+function canMoveForward() {
+
+  for (
+    const traffic of
+    trafficLights
+  ) {
+
+    if (
+      traffic.green
+    ) {
+
+      continue;
+
+    }
+
+    /*
+    Машинка должна остановиться
+    примерно за 120px
+    до светофора
+    */
+
+    const stopX =
+
+    traffic.x -
+    120;
+
+    if (
+      carWorldX >=
+      stopX - 10
+      &&
+      carWorldX <=
+      traffic.x
+    ) {
+
+      return false;
+
+    }
+
+  }
+
+  return true;
+
+}
 
 /* =========================
    КОЛЁСА
@@ -1040,11 +1249,9 @@ direction
     *
     direction;
 
-
   wheelFront.style.transform =
 
     `rotate(${wheelRotation}deg)`;
-
 
   wheelBack.style.transform =
 
@@ -1052,15 +1259,15 @@ direction
 
 }
 
-
 /* =========================
    ДВИЖЕНИЕ
 ========================= */
 
 function moveCar() {
 
-
-  /* ВПЕРЁД */
+  /*
+  ВПЕРЁД
+  */
 
   if (
     keys.ArrowRight
@@ -1068,21 +1275,25 @@ function moveCar() {
     !keys.ArrowLeft
   ) {
 
+    if (
+      canMoveForward()
+    ) {
 
-    carWorldX +=
-    SPEED_X;
+      carWorldX +=
+      SPEED_X;
 
+      rotateWheels(1);
+
+    }
 
     carInner.style.transform =
     "scaleX(1)";
 
-
-    rotateWheels(1);
-
   }
 
-
-  /* НАЗАД */
+  /*
+  НАЗАД
+  */
 
   if (
     keys.ArrowLeft
@@ -1090,21 +1301,19 @@ function moveCar() {
     !keys.ArrowRight
   ) {
 
-
     carWorldX -=
     SPEED_X;
 
-
     carInner.style.transform =
     "scaleX(-1)";
-
 
     rotateWheels(-1);
 
   }
 
-
-  /* ВВЕРХ */
+  /*
+  ВВЕРХ
+  */
 
   if (
     keys.ArrowUp
@@ -1115,8 +1324,9 @@ function moveCar() {
 
   }
 
-
-  /* ВНИЗ */
+  /*
+  ВНИЗ
+  */
 
   if (
     keys.ArrowDown
@@ -1127,8 +1337,9 @@ function moveCar() {
 
   }
 
-
-  /* ГРАНИЦЫ МИРА */
+  /*
+  ГРАНИЦЫ МИРА
+  */
 
   carWorldX =
 
@@ -1146,7 +1357,6 @@ function moveCar() {
     )
 
   );
-
 
   /*
   ГРАНИЦЫ ДОРОГИ
@@ -1170,29 +1380,24 @@ function moveCar() {
 
 }
 
-
 /* =========================
    КАМЕРА
 ========================= */
 
 function updateCamera() {
 
-
   const gameWidth =
   game.clientWidth;
-
 
   const desiredScreenX =
 
   gameWidth *
   .32;
 
-
   cameraX =
 
   carWorldX -
   desiredScreenX;
-
 
   cameraX =
 
@@ -1211,23 +1416,19 @@ function updateCamera() {
 
   );
 
-
   world.style.transform =
 
   `translateX(${-cameraX}px)`;
-
 
   const carScreenX =
 
   carWorldX -
   cameraX;
 
-
   car.style.left =
 
   carScreenX +
   "px";
-
 
   car.style.top =
 
@@ -1236,13 +1437,11 @@ function updateCamera() {
 
 }
 
-
 /* =========================
    УЧАСТОК
 ========================= */
 
 function updateSection() {
-
 
   let section =
 
@@ -1254,7 +1453,6 @@ function updateSection() {
   )
   +
   1;
-
 
   section =
 
@@ -1272,28 +1470,23 @@ function updateSection() {
 
   );
 
-
   sectionElement.textContent =
   section;
 
 }
 
-
 /* =========================
-   СБОР
+   СБОР ПРЕДМЕТОВ
 ========================= */
 
 function checkItems() {
-
 
   const carRect =
 
   car.getBoundingClientRect();
 
-
   itemObjects.forEach(
   item => {
-
 
     if (
       item.collected
@@ -1303,12 +1496,10 @@ function checkItems() {
 
     }
 
-
     const itemRect =
 
     item.element
     .getBoundingClientRect();
-
 
     const collision = !(
 
@@ -1332,15 +1523,12 @@ function checkItems() {
 
     );
 
-
     if (
       collision
     ) {
 
-
       item.collected =
       true;
-
 
       item.element
       .classList
@@ -1348,9 +1536,7 @@ function checkItems() {
         "collected"
       );
 
-
       score++;
-
 
       scoreElement.textContent =
       score;
@@ -1361,7 +1547,6 @@ function checkItems() {
 
 }
 
-
 /* =========================
    САЛЮТ
 ========================= */
@@ -1370,7 +1555,6 @@ function createFirework(
 x,
 y
 ) {
-
 
   const colors = [
 
@@ -1384,13 +1568,11 @@ y
 
   ];
 
-
   for (
     let i = 0;
     i < 24;
     i++
   ) {
-
 
     const particle =
 
@@ -1398,18 +1580,14 @@ y
       "div"
     );
 
-
     particle.className =
     "firework-particle";
-
 
     particle.style.left =
     x + "px";
 
-
     particle.style.top =
     y + "px";
-
 
     particle.style.background =
 
@@ -1421,7 +1599,6 @@ y
       )
     ];
 
-
     const angle =
 
     Math.random()
@@ -1430,7 +1607,6 @@ y
     *
     2;
 
-
     const distance =
 
     50
@@ -1438,7 +1614,6 @@ y
     Math.random()
     *
     100;
-
 
     particle.style.setProperty(
 
@@ -1452,7 +1627,6 @@ y
 
     );
 
-
     particle.style.setProperty(
 
       "--dy",
@@ -1465,11 +1639,9 @@ y
 
     );
 
-
     fireworks.appendChild(
       particle
     );
-
 
     setTimeout(
       () => {
@@ -1485,23 +1657,18 @@ y
 
 }
 
-
 function launchFireworks() {
-
 
   const width =
   game.clientWidth;
 
-
   const height =
   game.clientHeight;
-
 
   createFirework(
     width * .30,
     height * .32
   );
-
 
   setTimeout(
     () => {
@@ -1514,7 +1681,6 @@ function launchFireworks() {
     },
     200
   );
-
 
   setTimeout(
     () => {
@@ -1530,13 +1696,11 @@ function launchFireworks() {
 
 }
 
-
 /* =========================
    ФИНИШ
 ========================= */
 
 function checkFinish() {
-
 
   if (
     finished
@@ -1546,39 +1710,30 @@ function checkFinish() {
 
   }
 
-
   const FINISH_X =
   8750;
-
 
   if (
     carWorldX >=
     FINISH_X
   ) {
 
-
     finished =
     true;
-
 
     running =
     false;
 
-
     launchFireworks();
-
 
     setTimeout(
       () => {
 
-
         finishScore.textContent =
         score;
 
-
         finish.style.display =
         "flex";
-
 
       },
 
@@ -1589,18 +1744,15 @@ function checkFinish() {
 
 }
 
-
 /* =========================
    ЦИКЛ
 ========================= */
 
 function gameLoop() {
 
-
   if (
     running
   ) {
-
 
     moveCar();
 
@@ -1608,12 +1760,13 @@ function gameLoop() {
 
     updateSection();
 
+    updateTrafficLights();
+
     checkItems();
 
     checkFinish();
 
   }
-
 
   requestAnimationFrame(
     gameLoop
@@ -1621,99 +1774,86 @@ function gameLoop() {
 
 }
 
-
 /* =========================
    СТАРТ
 ========================= */
 
 function startGame() {
 
-
   carWorldX =
   250;
-
 
   carY =
   66;
 
-
   cameraX =
   0;
-
 
   score =
   0;
 
-
   finished =
   false;
-
 
   wheelRotation =
   0;
 
-
   scoreElement.textContent =
   "0";
-
 
   sectionElement.textContent =
   "1";
 
-
   finish.style.display =
   "none";
-
 
   startOverlay.style.display =
   "none";
 
-
   fireworks.innerHTML =
   "";
-
 
   carInner.style.transform =
   "scaleX(1)";
 
-
   wheelFront.style.transform =
   "rotate(0deg)";
-
 
   wheelBack.style.transform =
   "rotate(0deg)";
 
-
   createWorld();
 
+  createTrafficLights();
 
   updateCamera();
-
 
   running =
   true;
 
 }
 
-
-/* КНОПКИ */
+/* =========================
+   КНОПКИ
+========================= */
 
 startBtn.addEventListener(
 "click",
 startGame
 );
 
-
 restartBtn.addEventListener(
 "click",
 startGame
 );
 
-
-/* ПЕРВЫЙ ЗАПУСК */
+/* =========================
+   ПЕРВЫЙ ЗАПУСК
+========================= */
 
 createWorld();
+
+createTrafficLights();
 
 updateCamera();
 
