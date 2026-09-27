@@ -35,9 +35,7 @@ body {
   background: #9bd486;
 }
 
-/* =========================
-   ПАНЕЛЬ
-========================= */
+/* ПАНЕЛЬ */
 
 #hud {
   position: absolute;
@@ -72,9 +70,7 @@ body {
   pointer-events: none;
 }
 
-/* =========================
-   МИР
-========================= */
+/* МИР */
 
 #world {
   position: absolute;
@@ -97,9 +93,7 @@ body {
     );
 }
 
-/* =========================
-   ДОРОГА
-========================= */
+/* ДОРОГА */
 
 #road {
   position: absolute;
@@ -121,9 +115,7 @@ body {
   border-bottom: 10px solid white;
 }
 
-/* =========================
-   ПРЕДМЕТЫ
-========================= */
+/* ПРЕДМЕТЫ */
 
 .item {
   position: absolute;
@@ -150,9 +142,7 @@ body {
     scale(1.8);
 }
 
-/* =========================
-   ЗНАКИ
-========================= */
+/* ЗНАКИ */
 
 .sign {
   position: absolute;
@@ -168,16 +158,16 @@ body {
   z-index: 15;
 }
 
-/* =========================
-   ФИНИШ
-========================= */
+/* ФИНИШ */
 
 .finish-flag {
   position: absolute;
   left: 6030px;
   top: 41%;
+
   width: 120px;
   height: 300px;
+
   z-index: 30;
 }
 
@@ -226,9 +216,7 @@ body {
   }
 }
 
-/* =========================
-   МАШИНКА
-========================= */
+/* МАШИНКА */
 
 #car {
   position: absolute;
@@ -247,16 +235,14 @@ body {
 
 #carInner {
   position: relative;
-  width: 100%;
-  height: 100%;
+  width: 180px;
+  height: 120px;
 
   transform-origin: center center;
   transition: transform .08s linear;
 }
 
-/* =========================
-   КОРПУС МАШИНЫ
-========================= */
+/* КОРПУС */
 
 #carBody {
   position: absolute;
@@ -271,35 +257,36 @@ body {
   pointer-events: none;
 }
 
-/* =========================
-   КОЛЁСА
-========================= */
+/* КОЛЁСА */
 
 .wheel {
   position: absolute;
 
-  width: 46px;
-  height: 46px;
+  width: 50px;
+  height: 50px;
 
   z-index: 2;
 
-  transform-origin: center center;
+  transform-origin: 50% 50%;
+
   pointer-events: none;
 }
 
+/* ЗАДНЕЕ КОЛЕСО */
+
 #wheelBack {
-  left: 29px;
-  top: 69px;
+  left: 16px;
+  top: 64px;
 }
+
+/* ПЕРЕДНЕЕ КОЛЕСО */
 
 #wheelFront {
-  left: 111px;
-  top: 69px;
+  left: 116px;
+  top: 64px;
 }
 
-/* =========================
-   САЛЮТ
-========================= */
+/* САЛЮТ */
 
 #fireworks {
   position: absolute;
@@ -345,9 +332,7 @@ body {
   }
 }
 
-/* =========================
-   ОКНА
-========================= */
+/* ОКНА */
 
 .overlay {
   position: absolute;
@@ -427,8 +412,6 @@ button {
     ← назад · → вперёд · ↑ ↓ по дороге
   </div>
 
-  <!-- МИР -->
-
   <div id="world">
 
     <div id="background"></div>
@@ -438,11 +421,8 @@ button {
     <div id="objectsLayer"></div>
 
     <div class="finish-flag">
-
       <div class="flag-pole"></div>
-
       <div class="flag"></div>
-
     </div>
 
   </div>
@@ -477,8 +457,6 @@ button {
 
   </div>
 
-  <!-- САЛЮТ -->
-
   <div id="fireworks"></div>
 
   <!-- СТАРТ -->
@@ -490,9 +468,7 @@ button {
 
     <div class="card">
 
-      <h1>
-        Поехали!
-      </h1>
+      <h1>Поехали!</h1>
 
       <div>
         Собери все предметы и доедь до финиша.
@@ -515,9 +491,7 @@ button {
 
     <div class="card">
 
-      <h1>
-        🏁 Молодец!
-      </h1>
+      <h1>🏁 Молодец!</h1>
 
       <div>
         Ты добрался до финиша!
@@ -541,9 +515,7 @@ button {
 
 <script>
 
-/* =========================
-   ЭЛЕМЕНТЫ
-========================= */
+/* ЭЛЕМЕНТЫ */
 
 const game =
 document.getElementById("game");
@@ -591,9 +563,7 @@ const restartBtn =
 document.getElementById("restartBtn");
 
 
-/* =========================
-   НАСТРОЙКИ
-========================= */
+/* НАСТРОЙКИ */
 
 const WORLD_WIDTH =
 6200;
@@ -618,9 +588,7 @@ const WHEEL_ROTATION_SPEED =
 8;
 
 
-/* =========================
-   ПОЛОЖЕНИЕ
-========================= */
+/* ПОЛОЖЕНИЕ */
 
 let carWorldX =
 180;
@@ -644,9 +612,7 @@ let wheelRotation =
 0;
 
 
-/* =========================
-   КЛАВИШИ
-========================= */
+/* КЛАВИШИ */
 
 const keys = {
 
@@ -716,9 +682,7 @@ window.addEventListener(
 });
 
 
-/* =========================
-   25 ВРЕМЕННЫХ ПРЕДМЕТОВ
-========================= */
+/* 25 ВРЕМЕННЫХ ПРЕДМЕТОВ */
 
 const ALL_ITEMS = [
 
@@ -759,9 +723,7 @@ let itemObjects =
 [];
 
 
-/* =========================
-   СОЗДАЁМ МИР
-========================= */
+/* СОЗДАЁМ МИР */
 
 function createWorld() {
 
@@ -932,9 +894,7 @@ function createWorld() {
 }
 
 
-/* =========================
-   ВРАЩЕНИЕ КОЛЁС
-========================= */
+/* ВРАЩЕНИЕ КОЛЁС */
 
 function rotateWheels(
 direction
@@ -959,9 +919,7 @@ direction
 }
 
 
-/* =========================
-   ДВИЖЕНИЕ
-========================= */
+/* ДВИЖЕНИЕ */
 
 function moveCar() {
 
@@ -977,10 +935,6 @@ function moveCar() {
     carWorldX +=
     SPEED_X;
 
-
-    /*
-    МАШИНА СМОТРИТ ВПРАВО
-    */
 
     carInner.style.transform =
     "scaleX(1)";
@@ -1002,10 +956,6 @@ function moveCar() {
     carWorldX -=
     SPEED_X;
 
-
-    /*
-    МАШИНА СМОТРИТ ВЛЕВО
-    */
 
     carInner.style.transform =
     "scaleX(-1)";
@@ -1079,9 +1029,7 @@ function moveCar() {
 }
 
 
-/* =========================
-   КАМЕРА
-========================= */
+/* КАМЕРА */
 
 function updateCamera() {
 
@@ -1145,9 +1093,7 @@ function updateCamera() {
 }
 
 
-/* =========================
-   УЧАСТОК
-========================= */
+/* УЧАСТОК */
 
 function updateSection() {
 
@@ -1187,9 +1133,7 @@ function updateSection() {
 }
 
 
-/* =========================
-   СБОР ПРЕДМЕТОВ
-========================= */
+/* СБОР ПРЕДМЕТОВ */
 
 function checkItems() {
 
@@ -1270,9 +1214,7 @@ function checkItems() {
 }
 
 
-/* =========================
-   САЛЮТ
-========================= */
+/* САЛЮТ */
 
 function createFirework(
 x,
@@ -1410,13 +1352,8 @@ function launchFireworks() {
 
 
   createFirework(
-
-    width *
-    0.30,
-
-    height *
-    0.35
-
+    width * 0.30,
+    height * 0.35
   );
 
 
@@ -1424,17 +1361,11 @@ function launchFireworks() {
     () => {
 
       createFirework(
-
-        width *
-        0.50,
-
-        height *
-        0.23
-
+        width * 0.50,
+        height * 0.23
       );
 
     },
-
     220
   );
 
@@ -1443,26 +1374,18 @@ function launchFireworks() {
     () => {
 
       createFirework(
-
-        width *
-        0.70,
-
-        height *
-        0.35
-
+        width * 0.70,
+        height * 0.35
       );
 
     },
-
     440
   );
 
 }
 
 
-/* =========================
-   ФИНИШ
-========================= */
+/* ФИНИШ */
 
 function checkFinish() {
 
@@ -1510,7 +1433,6 @@ function checkFinish() {
 
 
       },
-
       900
     );
 
@@ -1519,9 +1441,7 @@ function checkFinish() {
 }
 
 
-/* =========================
-   ОСНОВНОЙ ЦИКЛ
-========================= */
+/* ОСНОВНОЙ ЦИКЛ */
 
 function gameLoop() {
 
@@ -1551,9 +1471,7 @@ function gameLoop() {
 }
 
 
-/* =========================
-   СТАРТ
-========================= */
+/* СТАРТ */
 
 function startGame() {
 
@@ -1602,11 +1520,6 @@ function startGame() {
   "";
 
 
-  /*
-  НА СТАРТЕ МАШИНА
-  СМОТРИТ ВПРАВО
-  */
-
   carInner.style.transform =
   "scaleX(1)";
 
@@ -1631,9 +1544,7 @@ function startGame() {
 }
 
 
-/* =========================
-   КНОПКИ
-========================= */
+/* КНОПКИ */
 
 startBtn.addEventListener(
 "click",
@@ -1647,9 +1558,7 @@ startGame
 );
 
 
-/* =========================
-   ПЕРВЫЙ ЗАПУСК
-========================= */
+/* ПЕРВЫЙ ЗАПУСК */
 
 createWorld();
 
