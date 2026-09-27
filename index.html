@@ -102,6 +102,28 @@ body {
 }
 
 /* =========================
+   ОБЛАКА НА СТЫКАХ
+========================= */
+
+#seamLayer {
+  position: absolute;
+  inset: 0;
+  z-index: 12;
+  pointer-events: none;
+}
+
+.seam-cloud {
+  position: absolute;
+  width: 290px;
+  height: auto;
+
+  transform: translate(-50%, -50%);
+
+  pointer-events: none;
+  user-select: none;
+}
+
+/* =========================
    ПРЕДМЕТЫ
 ========================= */
 
@@ -504,6 +526,10 @@ button.game-btn {
   .control-label {
     font-size: 13px;
   }
+
+  .seam-cloud {
+    width: 250px;
+  }
 }
 </style>
 </head>
@@ -529,6 +555,8 @@ button.game-btn {
   <div id="world">
 
     <div id="roadBackground"></div>
+
+    <div id="seamLayer"></div>
 
     <div id="objectsLayer"></div>
 
@@ -567,7 +595,6 @@ button.game-btn {
     </div>
   </div>
 
-  <!-- КНОПКИ -->
   <div id="touchControls">
     <button
       id="leftBtn"
@@ -627,6 +654,9 @@ document.getElementById("world");
 
 const roadBackground =
 document.getElementById("roadBackground");
+
+const seamLayer =
+document.getElementById("seamLayer");
 
 const finishFlag =
 document.getElementById("finishFlag");
@@ -818,12 +848,45 @@ function calculateWorldSize() {
 
     world.style.width = WORLD_WIDTH + "px";
     roadBackground.style.width = WORLD_WIDTH + "px";
+    seamLayer.style.width = WORLD_WIDTH + "px";
     finishFlag.style.left = FINISH_X + "px";
 
+    createSeamClouds();
     createWorld();
     createTrafficLights();
     updateCamera();
   };
+
+}
+
+/* =========================
+   ОБЛАКА НА СТЫКАХ
+========================= */
+
+function createSeamClouds() {
+
+  seamLayer.innerHTML = "";
+
+  for (let i = 1; i < TOTAL_SECTIONS; i++) {
+
+    const cloudX = SECTION_WIDTH * i;
+
+    const cloud = document.createElement("img");
+    cloud.className = "seam-cloud";
+    cloud.src = "items/cloud-seam.png";
+    cloud.alt = "";
+
+    cloud.style.left = cloudX + "px";
+
+    /*
+    Высота облака.
+    Если захотите чуть выше
+    или ниже — меняйте тут.
+    */
+    cloud.style.top = "18%";
+
+    seamLayer.appendChild(cloud);
+  }
 
 }
 
@@ -1238,6 +1301,7 @@ function startGame() {
   wheelFront.style.transform = "rotate(0deg)";
   wheelBack.style.transform = "rotate(0deg)";
 
+  createSeamClouds();
   createWorld();
   createTrafficLights();
   updateCamera();
