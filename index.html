@@ -4,9 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Машинка собирает предметы</title>
+<title>Машинка — звук Щ</title>
 
 <style>
+
 * {
   box-sizing: border-box;
   -webkit-tap-highlight-color: transparent;
@@ -28,9 +29,9 @@ body {
   align-items: center;
 }
 
-/* =========================
+/* ======================================
    ИГРА
-========================= */
+====================================== */
 
 #game {
   position: relative;
@@ -40,12 +41,13 @@ body {
   background: #dff3ff;
 }
 
-/* =========================
+/* ======================================
    HUD
-========================= */
+====================================== */
 
 #hud {
   position: absolute;
+
   top: 15px;
   left: 15px;
   right: 15px;
@@ -54,24 +56,31 @@ body {
   justify-content: space-between;
 
   z-index: 100;
+
   pointer-events: none;
 }
 
 .panel {
-  background: rgba(255,255,255,.94);
+  background: rgba(255,255,255,.95);
+
   padding: 9px 16px;
+
   border-radius: 22px;
-  font-weight: bold;
+
   font-size: 18px;
-  box-shadow: 0 4px 12px rgba(0,0,0,.14);
+  font-weight: bold;
+
+  box-shadow:
+    0 4px 12px rgba(0,0,0,.14);
 }
 
-/* =========================
-   ДЛИННЫЙ МИР
-========================= */
+/* ======================================
+   МИР
+====================================== */
 
 #world {
   position: absolute;
+
   left: 0;
   top: 0;
 
@@ -79,96 +88,128 @@ body {
   height: 100%;
 
   transform: translateX(0);
+
   will-change: transform;
 }
 
-/* =========================
+/* ======================================
    ФОН
-========================= */
+====================================== */
 
 #roadBackground {
   position: absolute;
+
   inset: 0;
 
   width: 9000px;
   height: 100%;
 
-  background-image: url("items/road-main.png");
-  background-size: auto 100%;
-  background-repeat: repeat-x;
-  background-position: left center;
+  background-image:
+    url("items/road-main.png");
+
+  background-size:
+    auto 100%;
+
+  background-repeat:
+    repeat-x;
+
+  background-position:
+    left center;
 
   z-index: 1;
 }
 
-/* =========================
+/* ======================================
    ОБЛАКА НА СТЫКАХ
-========================= */
+====================================== */
 
 #seamLayer {
   position: absolute;
+
   inset: 0;
+
   z-index: 12;
+
   pointer-events: none;
 }
 
 .seam-cloud {
   position: absolute;
+
   width: 290px;
   height: auto;
 
-  transform: translate(-50%, -50%);
+  transform:
+    translate(-50%, -50%);
 
   pointer-events: none;
-  user-select: none;
 }
 
-/* =========================
+/* ======================================
    ПРЕДМЕТЫ
-========================= */
+====================================== */
 
 .item {
   position: absolute;
 
-  width: 82px;
-  height: 82px;
+  width: 105px;
+  height: 105px;
 
   display: flex;
   justify-content: center;
   align-items: center;
 
-  font-size: 60px;
+  transform:
+    translate(-50%, -50%);
 
-  transform: translate(-50%, -50%);
-
-  z-index: 30;
+  z-index: 35;
 
   transition:
-    opacity .22s ease,
-    transform .22s ease;
+    opacity .25s ease,
+    transform .25s ease;
+}
+
+.item img {
+  display: block;
+
+  max-width: 100%;
+  max-height: 100%;
+
+  object-fit: contain;
+
+  pointer-events: none;
+
+  filter:
+    drop-shadow(
+      0 5px 5px rgba(0,0,0,.18)
+    );
 }
 
 .item.collected {
   opacity: 0;
+
   transform:
     translate(-50%, -50%)
-    scale(1.8);
+    scale(1.6);
 }
 
-/* =========================
+/* ======================================
    СВЕТОФОРЫ
-========================= */
+====================================== */
 
 .traffic-light {
   position: absolute;
 
   width: 130px;
+  height: auto;
 
-  transform: translate(-50%, -50%);
+  transform:
+    translate(-50%, -50%);
 
   z-index: 55;
 
   cursor: pointer;
+
   user-select: none;
 
   transition:
@@ -190,57 +231,76 @@ body {
 }
 
 @keyframes trafficPulse {
+
   from {
     filter:
-      drop-shadow(0 0 0 rgba(255,0,0,0));
+      drop-shadow(
+        0 0 0 rgba(255,0,0,0)
+      );
   }
 
   to {
     filter:
-      drop-shadow(0 0 14px rgba(255,70,70,.85));
+      drop-shadow(
+        0 0 14px rgba(255,70,70,.9)
+      );
   }
+
 }
 
-/* =========================
-   ПОДСКАЗКА У СВЕТОФОРА
-========================= */
+/* ======================================
+   ПОДСКАЗКА СВЕТОФОРА
+====================================== */
 
 .traffic-message {
   position: absolute;
 
-  transform: translate(-50%, -50%);
+  transform:
+    translate(-50%, -50%);
 
   z-index: 70;
 
-  background: rgba(255,255,255,.96);
-  padding: 8px 14px;
-  border-radius: 18px;
+  background:
+    rgba(255,255,255,.97);
 
-  font-size: 17px;
-  font-weight: bold;
+  padding:
+    8px 14px;
 
-  box-shadow: 0 4px 12px rgba(0,0,0,.16);
+  border-radius:
+    18px;
 
-  pointer-events: none;
+  font-size:
+    17px;
+
+  font-weight:
+    bold;
+
+  box-shadow:
+    0 4px 12px rgba(0,0,0,.16);
+
   white-space: nowrap;
 
+  pointer-events: none;
+
   opacity: 0;
-  transition: opacity .2s ease;
+
+  transition:
+    opacity .2s ease;
 }
 
 .traffic-message.show {
   opacity: 1;
 }
 
-/* =========================
+/* ======================================
    ФИНИШ
-========================= */
+====================================== */
 
 .finish-flag {
   position: absolute;
 
   left: 8750px;
-  top: 39%;
+  top: 38%;
 
   width: 120px;
   height: 300px;
@@ -258,6 +318,7 @@ body {
   height: 260px;
 
   background: #444;
+
   border-radius: 5px;
 }
 
@@ -270,7 +331,8 @@ body {
   width: 100px;
   height: 75px;
 
-  border: 3px solid #222;
+  border:
+    3px solid #222;
 
   background:
     conic-gradient(
@@ -281,25 +343,32 @@ body {
     )
     0 0 / 32px 32px;
 
-  transform-origin: left center;
+  transform-origin:
+    left center;
 
   animation:
-    flagWave 1s ease-in-out infinite alternate;
+    flagWave
+    1s ease-in-out
+    infinite alternate;
 }
 
 @keyframes flagWave {
+
   from {
-    transform: skewY(-2deg);
+    transform:
+      skewY(-2deg);
   }
 
   to {
-    transform: skewY(4deg);
+    transform:
+      skewY(4deg);
   }
+
 }
 
-/* =========================
+/* ======================================
    МАШИНКА
-========================= */
+====================================== */
 
 #car {
   position: absolute;
@@ -310,7 +379,8 @@ body {
   left: 180px;
   top: 66%;
 
-  transform: translate(-50%, -50%);
+  transform:
+    translate(-50%, -50%);
 
   z-index: 60;
 
@@ -323,8 +393,11 @@ body {
   width: 180px;
   height: 125px;
 
-  transform-origin: center center;
-  transition: transform .08s linear;
+  transform-origin:
+    center center;
+
+  transition:
+    transform .08s linear;
 }
 
 #carBody {
@@ -334,7 +407,6 @@ body {
   top: 0;
 
   width: 180px;
-  height: auto;
 
   z-index: 3;
 
@@ -349,7 +421,9 @@ body {
 
   z-index: 2;
 
-  transform-origin: 50% 50%;
+  transform-origin:
+    50% 50%;
+
   pointer-events: none;
 }
 
@@ -363,16 +437,18 @@ body {
   top: 68px;
 }
 
-/* =========================
+/* ======================================
    КНОПКИ УПРАВЛЕНИЯ
-========================= */
+====================================== */
 
 #touchControls {
   position: absolute;
+
   right: 18px;
   bottom: 18px;
 
   display: flex;
+
   gap: 14px;
 
   z-index: 160;
@@ -383,55 +459,70 @@ body {
   height: 92px;
 
   border: none;
+
   border-radius: 24px;
 
-  background: rgba(255,255,255,.95);
-  box-shadow: 0 8px 18px rgba(0,0,0,.18);
+  background:
+    rgba(255,255,255,.96);
+
+  box-shadow:
+    0 8px 18px rgba(0,0,0,.18);
 
   display: flex;
+
   flex-direction: column;
+
   justify-content: center;
   align-items: center;
 
   cursor: pointer;
+
   user-select: none;
 
   font-weight: bold;
+
   color: #222;
 
   transition:
     transform .12s ease,
-    box-shadow .12s ease,
     background .12s ease;
 }
 
 .control-btn:active,
 .control-btn.active {
-  transform: scale(.95);
-  background: #eaf4ff;
-  box-shadow: 0 4px 12px rgba(0,0,0,.15);
+
+  transform:
+    scale(.94);
+
+  background:
+    #eaf4ff;
 }
 
 .control-arrow {
   font-size: 34px;
+
   line-height: 1;
 }
 
 .control-label {
-  font-size: 15px;
   margin-top: 4px;
+
+  font-size: 15px;
 }
 
-/* =========================
+/* ======================================
    САЛЮТ
-========================= */
+====================================== */
 
 #fireworks {
   position: absolute;
+
   inset: 0;
 
   z-index: 190;
+
   pointer-events: none;
+
   overflow: hidden;
 }
 
@@ -449,73 +540,111 @@ body {
 }
 
 @keyframes fireworkExplosion {
+
   0% {
-    transform: translate(0,0) scale(1);
+    transform:
+      translate(0,0)
+      scale(1);
+
     opacity: 1;
   }
 
   100% {
     transform:
-      translate(var(--dx), var(--dy))
+      translate(
+        var(--dx),
+        var(--dy)
+      )
       scale(.2);
+
     opacity: 0;
   }
+
 }
 
-/* =========================
+/* ======================================
    ОКНА
-========================= */
+====================================== */
 
 .overlay {
   position: absolute;
+
   inset: 0;
 
   display: flex;
+
   justify-content: center;
   align-items: center;
 
-  background: rgba(0,0,0,.28);
+  background:
+    rgba(0,0,0,.28);
 
   z-index: 200;
 }
 
 .card {
   background: white;
-  padding: 30px 40px;
-  border-radius: 26px;
+
+  padding:
+    30px 40px;
+
+  border-radius:
+    26px;
+
   text-align: center;
-  box-shadow: 0 12px 35px rgba(0,0,0,.25);
+
+  box-shadow:
+    0 12px 35px rgba(0,0,0,.25);
 }
 
 .card h1 {
-  margin: 0 0 10px;
+  margin:
+    0 0 10px;
 }
 
 button.game-btn {
-  margin-top: 15px;
+  margin-top:
+    15px;
 
-  border: none;
-  border-radius: 999px;
+  border:
+    none;
 
-  padding: 14px 30px;
+  border-radius:
+    999px;
 
-  background: #2f80ed;
-  color: white;
+  padding:
+    14px 30px;
 
-  font-size: 19px;
-  font-weight: bold;
+  background:
+    #2f80ed;
 
-  cursor: pointer;
+  color:
+    white;
+
+  font-size:
+    19px;
+
+  font-weight:
+    bold;
+
+  cursor:
+    pointer;
 }
 
 #finish {
   display: none;
 }
 
+/* ======================================
+   ПЛАНШЕТ
+====================================== */
+
 @media (max-width: 900px) {
+
   .control-btn {
     width: 78px;
     height: 78px;
+
     border-radius: 20px;
   }
 
@@ -527,16 +656,25 @@ button.game-btn {
     font-size: 13px;
   }
 
+  .item {
+    width: 88px;
+    height: 88px;
+  }
+
   .seam-cloud {
     width: 250px;
   }
+
 }
+
 </style>
 </head>
 
 <body>
 
 <div id="game">
+
+  <!-- HUD -->
 
   <div id="hud">
 
@@ -552,6 +690,8 @@ button.game-btn {
 
   </div>
 
+  <!-- МИР -->
+
   <div id="world">
 
     <div id="roadBackground"></div>
@@ -562,14 +702,23 @@ button.game-btn {
 
     <div id="trafficLayer"></div>
 
-    <div class="finish-flag" id="finishFlag">
+    <div
+      class="finish-flag"
+      id="finishFlag"
+    >
+
       <div class="flag-pole"></div>
+
       <div class="flag"></div>
+
     </div>
 
   </div>
 
+  <!-- МАШИНА -->
+
   <div id="car">
+
     <div id="carInner">
 
       <img
@@ -593,58 +742,117 @@ button.game-btn {
       >
 
     </div>
+
   </div>
 
+  <!-- УПРАВЛЕНИЕ -->
+
   <div id="touchControls">
+
     <button
       id="leftBtn"
       class="control-btn"
       type="button"
-      aria-label="Назад"
     >
-      <div class="control-arrow">◀</div>
-      <div class="control-label">назад</div>
+
+      <div class="control-arrow">
+        ◀
+      </div>
+
+      <div class="control-label">
+        назад
+      </div>
+
     </button>
 
     <button
       id="rightBtn"
       class="control-btn"
       type="button"
-      aria-label="Вперёд"
     >
-      <div class="control-arrow">▶</div>
-      <div class="control-label">вперёд</div>
+
+      <div class="control-arrow">
+        ▶
+      </div>
+
+      <div class="control-label">
+        вперёд
+      </div>
+
     </button>
+
   </div>
 
   <div id="fireworks"></div>
 
-  <div id="startOverlay" class="overlay">
+  <!-- СТАРТ -->
+
+  <div
+    id="startOverlay"
+    class="overlay"
+  >
+
     <div class="card">
-      <h1>Поехали!</h1>
-      <div>Собери предметы и проезжай светофоры.</div>
-      <button id="startBtn" class="game-btn">СТАРТ</button>
+
+      <h1>
+        Звук Щ
+      </h1>
+
+      <div>
+        Собери все картинки со звуком Щ.
+      </div>
+
+      <button
+        id="startBtn"
+        class="game-btn"
+      >
+        СТАРТ
+      </button>
+
     </div>
+
   </div>
 
-  <div id="finish" class="overlay">
+  <!-- ФИНИШ -->
+
+  <div
+    id="finish"
+    class="overlay"
+  >
+
     <div class="card">
-      <h1>🏁 Молодец!</h1>
-      <div>Ты добрался до финиша!</div>
+
+      <h1>
+        🏁 Молодец!
+      </h1>
+
       <div>
-        Собрано предметов:
+        Ты доехал до финиша!
+      </div>
+
+      <div>
+        Собрано:
         <strong id="finishScore">25</strong>/25
       </div>
-      <button id="restartBtn" class="game-btn">Играть ещё</button>
+
+      <button
+        id="restartBtn"
+        class="game-btn"
+      >
+        Играть ещё
+      </button>
+
     </div>
+
   </div>
 
 </div>
 
 <script>
-/* =========================
+
+/* ======================================
    ЭЛЕМЕНТЫ
-========================= */
+====================================== */
 
 const game =
 document.getElementById("game");
@@ -709,52 +917,69 @@ document.getElementById("leftBtn");
 const rightBtn =
 document.getElementById("rightBtn");
 
-/* =========================
+/* ======================================
    МИР
-========================= */
+====================================== */
 
 const TOTAL_SECTIONS = 5;
 
 let SECTION_WIDTH = 2025;
-let WORLD_WIDTH = SECTION_WIDTH * TOTAL_SECTIONS;
-let FINISH_X = WORLD_WIDTH - 250;
 
-/* =========================
-   СКОРОСТЬ
-========================= */
+let WORLD_WIDTH =
+SECTION_WIDTH *
+TOTAL_SECTIONS;
+
+let FINISH_X =
+WORLD_WIDTH -
+250;
+
+/* ======================================
+   ДВИЖЕНИЕ
+====================================== */
 
 const SPEED_X = 7;
+
 const WHEEL_ROTATION_SPEED = 9;
 
-/* =========================
-   ПОЛОЖЕНИЕ
-========================= */
-
 let carWorldX = 250;
+
 let carY = 66;
+
 let cameraX = 0;
 
 let score = 0;
+
 let running = false;
+
 let finished = false;
+
 let wheelRotation = 0;
 
-/* =========================
-   КЛАВИШИ
-========================= */
+/* ======================================
+   КНОПКИ
+====================================== */
 
 const keys = {
+
   ArrowLeft: false,
+
   ArrowRight: false
+
 };
 
 window.addEventListener(
 "keydown",
 event => {
 
-  if (event.key in keys) {
+  if (
+    event.key in keys
+  ) {
+
     event.preventDefault();
-    keys[event.key] = true;
+
+    keys[event.key] =
+    true;
+
   }
 
 });
@@ -763,572 +988,1176 @@ window.addEventListener(
 "keyup",
 event => {
 
-  if (event.key in keys) {
+  if (
+    event.key in keys
+  ) {
+
     event.preventDefault();
-    keys[event.key] = false;
+
+    keys[event.key] =
+    false;
+
   }
 
 });
 
-window.addEventListener(
-"blur",
-() => {
+/* ======================================
+   СЕНСОР
+====================================== */
 
-  keys.ArrowLeft = false;
-  keys.ArrowRight = false;
+function bindHoldButton(
+button,
+keyName
+) {
 
-  leftBtn.classList.remove("active");
-  rightBtn.classList.remove("active");
+  const press =
+  event => {
 
-});
-
-/* =========================
-   СЕНСОРНЫЕ КНОПКИ
-========================= */
-
-function bindHoldButton(button, keyName) {
-
-  const press = (event) => {
     event.preventDefault();
-    keys[keyName] = true;
-    button.classList.add("active");
+
+    keys[keyName] =
+    true;
+
+    button.classList.add(
+      "active"
+    );
+
   };
 
-  const release = (event) => {
+  const release =
+  event => {
+
     event.preventDefault();
-    keys[keyName] = false;
-    button.classList.remove("active");
+
+    keys[keyName] =
+    false;
+
+    button.classList.remove(
+      "active"
+    );
+
   };
 
-  button.addEventListener("mousedown", press);
-  button.addEventListener("touchstart", press, { passive: false });
+  button.addEventListener(
+    "pointerdown",
+    press
+  );
 
-  button.addEventListener("mouseup", release);
-  button.addEventListener("mouseleave", release);
-  button.addEventListener("touchend", release, { passive: false });
-  button.addEventListener("touchcancel", release, { passive: false });
+  button.addEventListener(
+    "pointerup",
+    release
+  );
+
+  button.addEventListener(
+    "pointerleave",
+    release
+  );
+
+  button.addEventListener(
+    "pointercancel",
+    release
+  );
+
 }
 
-bindHoldButton(leftBtn, "ArrowLeft");
-bindHoldButton(rightBtn, "ArrowRight");
+bindHoldButton(
+  leftBtn,
+  "ArrowLeft"
+);
 
-/* =========================
-   ПРЕДМЕТЫ
-========================= */
+bindHoldButton(
+  rightBtn,
+  "ArrowRight"
+);
 
-const ALL_ITEMS = [
-  "🍎","🍐","🍊","🍋","🍉",
-  "⚽","🏀","🎾","🧸","🎈",
-  "🚂","🚲","🚁","⛵","🚜",
-  "🐱","🐶","🐭","🐰","🦊",
-  "⭐","🌙","☀️","🌈","☁️"
-];
+/* ======================================
+   25 КАРТИНОК
+====================================== */
+
+const ALL_ITEMS = [];
+
+for (
+  let i = 1;
+  i <= 25;
+  i++
+) {
+
+  const number =
+
+  String(i)
+  .padStart(
+    2,
+    "0"
+  );
+
+  ALL_ITEMS.push(
+
+    `items/sh/pik-${number}.png`
+
+  );
+
+}
 
 let itemObjects = [];
+
 let trafficLights = [];
 
-/* =========================
-   РЕАЛЬНАЯ ШИРИНА ФОНА
-========================= */
+/* ======================================
+   РАЗМЕР ФОНА
+====================================== */
 
 function calculateWorldSize() {
 
-  const bgImage = new Image();
+  const bg =
+  new Image();
 
-  bgImage.src = "items/road-main.png";
+  bg.src =
+  "items/road-main.png";
 
-  bgImage.onload = () => {
+  bg.onload =
+  () => {
 
-    const gameHeight = game.clientHeight;
-    const ratio = bgImage.naturalWidth / bgImage.naturalHeight;
+    const gameHeight =
+    game.clientHeight;
 
-    SECTION_WIDTH = gameHeight * ratio;
-    WORLD_WIDTH = SECTION_WIDTH * TOTAL_SECTIONS;
-    FINISH_X = WORLD_WIDTH - 250;
+    const ratio =
 
-    world.style.width = WORLD_WIDTH + "px";
-    roadBackground.style.width = WORLD_WIDTH + "px";
-    seamLayer.style.width = WORLD_WIDTH + "px";
-    finishFlag.style.left = FINISH_X + "px";
+    bg.naturalWidth /
+    bg.naturalHeight;
+
+    SECTION_WIDTH =
+
+    gameHeight *
+    ratio;
+
+    WORLD_WIDTH =
+
+    SECTION_WIDTH *
+    TOTAL_SECTIONS;
+
+    FINISH_X =
+
+    WORLD_WIDTH -
+    250;
+
+    world.style.width =
+    WORLD_WIDTH +
+    "px";
+
+    roadBackground.style.width =
+    WORLD_WIDTH +
+    "px";
+
+    seamLayer.style.width =
+    WORLD_WIDTH +
+    "px";
+
+    finishFlag.style.left =
+    FINISH_X +
+    "px";
 
     createSeamClouds();
+
     createWorld();
+
     createTrafficLights();
+
     updateCamera();
+
   };
 
 }
 
-/* =========================
-   ОБЛАКА НА СТЫКАХ
-========================= */
+/* ======================================
+   ОБЛАКА
+====================================== */
 
 function createSeamClouds() {
 
-  seamLayer.innerHTML = "";
+  seamLayer.innerHTML =
+  "";
 
-  for (let i = 1; i < TOTAL_SECTIONS; i++) {
+  for (
+    let i = 1;
+    i < TOTAL_SECTIONS;
+    i++
+  ) {
 
-    const cloudX = SECTION_WIDTH * i;
+    const cloudX =
 
-    const cloud = document.createElement("img");
-    cloud.className = "seam-cloud";
-    cloud.src = "items/cloud-seam.png";
-    cloud.alt = "";
+    SECTION_WIDTH *
+    i;
 
-    cloud.style.left = cloudX + "px";
+    const cloud =
 
-    /*
-    Высота облака.
-    Если захотите чуть выше
-    или ниже — меняйте тут.
-    */
-    cloud.style.top = "18%";
+    document.createElement(
+      "img"
+    );
 
-    seamLayer.appendChild(cloud);
+    cloud.className =
+    "seam-cloud";
+
+    cloud.src =
+    "items/cloud-seam.png";
+
+    cloud.alt =
+    "";
+
+    cloud.style.left =
+    cloudX +
+    "px";
+
+    cloud.style.top =
+    "18%";
+
+    seamLayer.appendChild(
+      cloud
+    );
+
   }
 
 }
 
-/* =========================
-   СОЗДАНИЕ ПРЕДМЕТОВ
-========================= */
+/* ======================================
+   СОЗДАЁМ 25 КАРТИНОК
+====================================== */
 
 function createWorld() {
 
-  objectsLayer.innerHTML = "";
-  itemObjects = [];
+  objectsLayer.innerHTML =
+  "";
 
-  const relativeOffsets = [
-    0.16,
-    0.33,
-    0.50,
-    0.67,
-    0.84
+  itemObjects =
+  [];
+
+  /*
+  5 предметов
+  на каждом участке
+  */
+
+  const positions = [
+
+    0.15,
+    0.32,
+    0.49,
+    0.66,
+    0.83
+
   ];
+
+  /*
+  Немного разные
+  вертикальные позиции,
+  чтобы картинки были
+  распределены по дороге.
+  */
 
   const yPositions = [
-    62,
-    66,
+
     61,
+    66,
+    62,
     67,
     63
+
   ];
 
-  for (let section = 0; section < TOTAL_SECTIONS; section++) {
+  for (
+    let section = 0;
+    section < 5;
+    section++
+  ) {
 
-    const sectionStart = section * SECTION_WIDTH;
+    const sectionStart =
 
-    for (let i = 0; i < 5; i++) {
+    section *
+    SECTION_WIDTH;
 
-      const index = section * 5 + i;
+    for (
+      let i = 0;
+      i < 5;
+      i++
+    ) {
 
-      const item = document.createElement("div");
-      item.className = "item";
-      item.innerHTML = ALL_ITEMS[index];
+      const index =
+
+      section *
+      5 +
+      i;
+
+      const wrapper =
+
+      document.createElement(
+        "div"
+      );
+
+      wrapper.className =
+      "item";
+
+      const img =
+
+      document.createElement(
+        "img"
+      );
+
+      img.src =
+      ALL_ITEMS[index];
+
+      img.alt =
+      `Предмет ${index + 1}`;
+
+      wrapper.appendChild(
+        img
+      );
 
       const worldX =
-        sectionStart +
-        SECTION_WIDTH * relativeOffsets[i];
 
-      item.style.left = worldX + "px";
-      item.style.top = yPositions[i] + "%";
+      sectionStart +
+      SECTION_WIDTH *
+      positions[i];
 
-      objectsLayer.appendChild(item);
+      wrapper.style.left =
+      worldX +
+      "px";
+
+      wrapper.style.top =
+      yPositions[i] +
+      "%";
+
+      objectsLayer.appendChild(
+        wrapper
+      );
 
       itemObjects.push({
-        element: item,
-        collected: false
+
+        element:
+        wrapper,
+
+        collected:
+        false
+
       });
+
     }
+
   }
+
 }
 
-/* =========================
-   СВЕТОФОРЫ НА СТЫКАХ
-========================= */
+/* ======================================
+   СВЕТОФОРЫ
+====================================== */
 
 function createTrafficLights() {
 
-  trafficLayer.innerHTML = "";
-  trafficLights = [];
+  trafficLayer.innerHTML =
+  "";
 
-  for (let i = 1; i < TOTAL_SECTIONS; i++) {
+  trafficLights =
+  [];
 
-    const trafficX = SECTION_WIDTH * i;
+  for (
+    let i = 1;
+    i < 5;
+    i++
+  ) {
 
-    const img = document.createElement("img");
-    img.className = "traffic-light";
-    img.src = "items/traffic-red.png";
-    img.alt = "Светофор";
-    img.style.left = trafficX + "px";
-    img.style.top = "50%";
+    const x =
 
-    const message = document.createElement("div");
-    message.className = "traffic-message";
-    message.textContent = "Нажми на светофор";
-    message.style.left = trafficX + "px";
-    message.style.top = "31%";
+    SECTION_WIDTH *
+    i;
 
-    trafficLayer.appendChild(img);
-    trafficLayer.appendChild(message);
+    const img =
 
-    const trafficObject = {
-      x: trafficX,
+    document.createElement(
+      "img"
+    );
+
+    img.className =
+    "traffic-light";
+
+    img.src =
+    "items/traffic-red.png";
+
+    img.style.left =
+    x +
+    "px";
+
+    img.style.top =
+    "50%";
+
+    const message =
+
+    document.createElement(
+      "div"
+    );
+
+    message.className =
+    "traffic-message";
+
+    message.textContent =
+    "Нажми на светофор";
+
+    message.style.left =
+    x +
+    "px";
+
+    message.style.top =
+    "31%";
+
+    trafficLayer.appendChild(
+      img
+    );
+
+    trafficLayer.appendChild(
+      message
+    );
+
+    const traffic = {
+
+      x: x,
+
       green: false,
+
       element: img,
+
       message: message
+
     };
 
-    img.addEventListener("click", () => {
+    img.addEventListener(
+    "click",
+    () => {
 
       const distance =
-        Math.abs(carWorldX - trafficX);
 
-      if (distance <= 400) {
-        trafficObject.green = true;
-        img.src = "items/traffic-green.png";
-        img.classList.remove("ready");
-        message.classList.remove("show");
+      Math.abs(
+        carWorldX -
+        x
+      );
+
+      if (
+        distance <
+        400
+      ) {
+
+        traffic.green =
+        true;
+
+        img.src =
+        "items/traffic-green.png";
+
+        message
+        .classList
+        .remove(
+          "show"
+        );
+
+        img
+        .classList
+        .remove(
+          "ready"
+        );
+
       }
 
     });
 
-    trafficLights.push(trafficObject);
+    trafficLights.push(
+      traffic
+    );
+
   }
+
 }
 
-/* =========================
-   СВЕТОФОРЫ
-========================= */
+/* ======================================
+   СВЕТОФОРЫ — СОСТОЯНИЕ
+====================================== */
 
 function updateTrafficLights() {
 
-  trafficLights.forEach(traffic => {
+  trafficLights.forEach(
+  traffic => {
 
-    if (traffic.green) {
-      traffic.element.classList.remove("ready");
-      traffic.message.classList.remove("show");
+    if (
+      traffic.green
+    ) {
+
+      traffic.element
+      .classList
+      .remove(
+        "ready"
+      );
+
+      traffic.message
+      .classList
+      .remove(
+        "show"
+      );
+
       return;
+
     }
 
-    const distance = traffic.x - carWorldX;
+    const distance =
 
-    if (distance > 0 && distance < 450) {
-      traffic.element.classList.add("ready");
-      traffic.message.classList.add("show");
-    } else {
-      traffic.element.classList.remove("ready");
-      traffic.message.classList.remove("show");
+    traffic.x -
+    carWorldX;
+
+    if (
+      distance >
+      0
+      &&
+      distance <
+      450
+    ) {
+
+      traffic.element
+      .classList
+      .add(
+        "ready"
+      );
+
+      traffic.message
+      .classList
+      .add(
+        "show"
+      );
+
+    }
+    else {
+
+      traffic.element
+      .classList
+      .remove(
+        "ready"
+      );
+
+      traffic.message
+      .classList
+      .remove(
+        "show"
+      );
+
     }
 
   });
+
 }
 
-/* =========================
+/* ======================================
    КРАСНЫЙ СВЕТ
-========================= */
+====================================== */
 
 function canMoveForward() {
 
-  for (const traffic of trafficLights) {
+  for (
+    const traffic of
+    trafficLights
+  ) {
 
-    if (traffic.green) {
+    if (
+      traffic.green
+    ) {
+
       continue;
+
     }
 
-    const stopX = traffic.x - 145;
+    const stopX =
 
-    if (carWorldX >= stopX && carWorldX <= traffic.x) {
+    traffic.x -
+    145;
+
+    if (
+      carWorldX >=
+      stopX
+      &&
+      carWorldX <=
+      traffic.x
+    ) {
+
       return false;
+
     }
+
   }
 
   return true;
+
 }
 
-/* =========================
+/* ======================================
    КОЛЁСА
-========================= */
+====================================== */
 
-function rotateWheels(direction) {
+function rotateWheels(
+direction
+) {
 
-  wheelRotation += WHEEL_ROTATION_SPEED * direction;
+  wheelRotation +=
+
+  WHEEL_ROTATION_SPEED *
+  direction;
 
   wheelFront.style.transform =
-    `rotate(${wheelRotation}deg)`;
+
+  `rotate(${wheelRotation}deg)`;
 
   wheelBack.style.transform =
-    `rotate(${wheelRotation}deg)`;
+
+  `rotate(${wheelRotation}deg)`;
+
 }
 
-/* =========================
+/* ======================================
    ДВИЖЕНИЕ
-========================= */
+====================================== */
 
 function moveCar() {
 
-  if (keys.ArrowRight && !keys.ArrowLeft) {
+  if (
+    keys.ArrowRight
+    &&
+    !keys.ArrowLeft
+  ) {
 
-    if (canMoveForward()) {
-      carWorldX += SPEED_X;
-      rotateWheels(1);
+    if (
+      canMoveForward()
+    ) {
+
+      carWorldX +=
+      SPEED_X;
+
+      rotateWheels(
+        1
+      );
+
     }
 
-    carInner.style.transform = "scaleX(1)";
+    carInner.style.transform =
+    "scaleX(1)";
+
   }
 
-  if (keys.ArrowLeft && !keys.ArrowRight) {
-    carWorldX -= SPEED_X;
-    carInner.style.transform = "scaleX(-1)";
-    rotateWheels(-1);
+  if (
+    keys.ArrowLeft
+    &&
+    !keys.ArrowRight
+  ) {
+
+    carWorldX -=
+    SPEED_X;
+
+    rotateWheels(
+      -1
+    );
+
+    carInner.style.transform =
+    "scaleX(-1)";
+
   }
 
-  carWorldX = Math.max(
+  carWorldX =
+
+  Math.max(
+
     90,
-    Math.min(WORLD_WIDTH - 100, carWorldX)
+
+    Math.min(
+
+      WORLD_WIDTH -
+      100,
+
+      carWorldX
+
+    )
+
   );
+
 }
 
-/* =========================
+/* ======================================
    КАМЕРА
-========================= */
+====================================== */
 
 function updateCamera() {
 
-  const gameWidth = game.clientWidth;
-  const desiredScreenX = gameWidth * 0.32;
+  const gameWidth =
+  game.clientWidth;
 
-  cameraX = carWorldX - desiredScreenX;
+  const screenX =
 
-  cameraX = Math.max(
+  gameWidth *
+  .32;
+
+  cameraX =
+
+  carWorldX -
+  screenX;
+
+  cameraX =
+
+  Math.max(
+
     0,
-    Math.min(WORLD_WIDTH - gameWidth, cameraX)
+
+    Math.min(
+
+      WORLD_WIDTH -
+      gameWidth,
+
+      cameraX
+
+    )
+
   );
 
   world.style.transform =
-    `translateX(${-cameraX}px)`;
 
-  const carScreenX = carWorldX - cameraX;
+  `translateX(${-cameraX}px)`;
 
-  car.style.left = carScreenX + "px";
-  car.style.top = carY + "%";
+  car.style.left =
+
+  (
+    carWorldX -
+    cameraX
+  )
+  +
+  "px";
+
+  car.style.top =
+  carY +
+  "%";
+
 }
 
-/* =========================
-   УЧАСТОК
-========================= */
+/* ======================================
+   НОМЕР УЧАСТКА
+====================================== */
 
 function updateSection() {
 
   let section =
-    Math.floor(carWorldX / SECTION_WIDTH) + 1;
 
-  section = Math.max(
+  Math.floor(
+
+    carWorldX /
+    SECTION_WIDTH
+
+  )
+  +
+  1;
+
+  section =
+
+  Math.max(
+
     1,
-    Math.min(TOTAL_SECTIONS, section)
+
+    Math.min(
+
+      5,
+
+      section
+
+    )
+
   );
 
-  sectionElement.textContent = section;
+  sectionElement.textContent =
+  section;
+
 }
 
-/* =========================
+/* ======================================
    СБОР ПРЕДМЕТОВ
-========================= */
+====================================== */
 
 function checkItems() {
 
-  const carRect = car.getBoundingClientRect();
+  const carRect =
 
-  itemObjects.forEach(item => {
+  car
+  .getBoundingClientRect();
 
-    if (item.collected) {
+  itemObjects.forEach(
+  item => {
+
+    if (
+      item.collected
+    ) {
+
       return;
+
     }
 
     const itemRect =
-      item.element.getBoundingClientRect();
 
-    const collision = !(
-      carRect.right < itemRect.left ||
-      carRect.left > itemRect.right ||
-      carRect.bottom < itemRect.top ||
-      carRect.top > itemRect.bottom
+    item.element
+    .getBoundingClientRect();
+
+    const hit = !(
+
+      carRect.right <
+      itemRect.left
+
+      ||
+
+      carRect.left >
+      itemRect.right
+
+      ||
+
+      carRect.bottom <
+      itemRect.top
+
+      ||
+
+      carRect.top >
+      itemRect.bottom
+
     );
 
-    if (collision) {
-      item.collected = true;
-      item.element.classList.add("collected");
+    if (
+      hit
+    ) {
+
+      item.collected =
+      true;
+
+      item.element
+      .classList
+      .add(
+        "collected"
+      );
+
       score++;
-      scoreElement.textContent = score;
+
+      scoreElement.textContent =
+      score;
+
     }
+
   });
+
 }
 
-/* =========================
+/* ======================================
    САЛЮТ
-========================= */
+====================================== */
 
-function createFirework(x, y) {
+function createFirework(
+x,
+y
+) {
 
   const colors = [
+
     "#ff3b30",
     "#ffcc00",
     "#34c759",
     "#007aff",
     "#af52de",
-    "#ff9500",
-    "#ff2d9a"
+    "#ff9500"
+
   ];
 
-  for (let i = 0; i < 24; i++) {
+  for (
+    let i = 0;
+    i < 24;
+    i++
+  ) {
 
-    const particle =
-      document.createElement("div");
+    const p =
 
-    particle.className = "firework-particle";
-    particle.style.left = x + "px";
-    particle.style.top = y + "px";
-    particle.style.background =
-      colors[Math.floor(Math.random() * colors.length)];
+    document.createElement(
+      "div"
+    );
 
-    const angle = Math.random() * Math.PI * 2;
-    const distance = 50 + Math.random() * 100;
+    p.className =
+    "firework-particle";
 
-    particle.style.setProperty(
+    p.style.left =
+    x +
+    "px";
+
+    p.style.top =
+    y +
+    "px";
+
+    p.style.background =
+
+    colors[
+      Math.floor(
+        Math.random() *
+        colors.length
+      )
+    ];
+
+    const angle =
+
+    Math.random() *
+    Math.PI *
+    2;
+
+    const distance =
+
+    50 +
+    Math.random() *
+    100;
+
+    p.style.setProperty(
+
       "--dx",
-      Math.cos(angle) * distance + "px"
+
+      Math.cos(angle) *
+      distance +
+      "px"
+
     );
 
-    particle.style.setProperty(
+    p.style.setProperty(
+
       "--dy",
-      Math.sin(angle) * distance + "px"
+
+      Math.sin(angle) *
+      distance +
+      "px"
+
     );
 
-    fireworks.appendChild(particle);
+    fireworks.appendChild(
+      p
+    );
 
-    setTimeout(() => {
-      particle.remove();
-    }, 1000);
+    setTimeout(
+      () => {
+
+        p.remove();
+
+      },
+
+      1000
+    );
+
   }
+
 }
 
 function launchFireworks() {
 
-  const width = game.clientWidth;
-  const height = game.clientHeight;
+  const w =
+  game.clientWidth;
 
-  createFirework(width * .30, height * .32);
+  const h =
+  game.clientHeight;
 
-  setTimeout(() => {
-    createFirework(width * .50, height * .20);
-  }, 200);
+  createFirework(
+    w * .3,
+    h * .3
+  );
 
-  setTimeout(() => {
-    createFirework(width * .70, height * .32);
-  }, 400);
+  setTimeout(
+    () => {
+
+      createFirework(
+        w * .5,
+        h * .2
+      );
+
+    },
+    200
+  );
+
+  setTimeout(
+    () => {
+
+      createFirework(
+        w * .7,
+        h * .3
+      );
+
+    },
+    400
+  );
+
 }
 
-/* =========================
+/* ======================================
    ФИНИШ
-========================= */
+====================================== */
 
 function checkFinish() {
 
-  if (finished) {
+  if (
+    finished
+  ) {
+
     return;
+
   }
 
-  if (carWorldX >= FINISH_X) {
-    finished = true;
-    running = false;
+  if (
+    carWorldX >=
+    FINISH_X
+  ) {
+
+    finished =
+    true;
+
+    running =
+    false;
 
     launchFireworks();
 
-    setTimeout(() => {
-      finishScore.textContent = score;
-      finish.style.display = "flex";
-    }, 950);
+    setTimeout(
+      () => {
+
+        finishScore.textContent =
+        score;
+
+        finish.style.display =
+        "flex";
+
+      },
+
+      900
+    );
+
   }
+
 }
 
-/* =========================
+/* ======================================
    ЦИКЛ
-========================= */
+====================================== */
 
 function gameLoop() {
 
-  if (running) {
+  if (
+    running
+  ) {
+
     moveCar();
+
     updateCamera();
+
     updateSection();
+
     updateTrafficLights();
+
     checkItems();
+
     checkFinish();
+
   }
 
-  requestAnimationFrame(gameLoop);
+  requestAnimationFrame(
+    gameLoop
+  );
+
 }
 
-/* =========================
+/* ======================================
    СТАРТ
-========================= */
+====================================== */
 
 function startGame() {
 
-  carWorldX = 250;
-  carY = 66;
-  cameraX = 0;
+  carWorldX =
+  250;
 
-  score = 0;
-  finished = false;
-  wheelRotation = 0;
+  cameraX =
+  0;
 
-  keys.ArrowLeft = false;
-  keys.ArrowRight = false;
+  score =
+  0;
 
-  leftBtn.classList.remove("active");
-  rightBtn.classList.remove("active");
+  finished =
+  false;
 
-  scoreElement.textContent = "0";
-  sectionElement.textContent = "1";
+  wheelRotation =
+  0;
 
-  finish.style.display = "none";
-  startOverlay.style.display = "none";
-  fireworks.innerHTML = "";
+  keys.ArrowLeft =
+  false;
 
-  carInner.style.transform = "scaleX(1)";
-  wheelFront.style.transform = "rotate(0deg)";
-  wheelBack.style.transform = "rotate(0deg)";
+  keys.ArrowRight =
+  false;
+
+  scoreElement.textContent =
+  "0";
+
+  sectionElement.textContent =
+  "1";
+
+  finish.style.display =
+  "none";
+
+  startOverlay.style.display =
+  "none";
+
+  fireworks.innerHTML =
+  "";
+
+  carInner.style.transform =
+  "scaleX(1)";
+
+  wheelFront.style.transform =
+  "rotate(0deg)";
+
+  wheelBack.style.transform =
+  "rotate(0deg)";
 
   createSeamClouds();
+
   createWorld();
+
   createTrafficLights();
+
   updateCamera();
 
-  running = true;
+  running =
+  true;
+
 }
 
-/* =========================
+/* ======================================
    КНОПКИ
-========================= */
+====================================== */
 
-startBtn.addEventListener("click", startGame);
-restartBtn.addEventListener("click", startGame);
+startBtn.addEventListener(
+"click",
+startGame
+);
 
-/* =========================
+restartBtn.addEventListener(
+"click",
+startGame
+);
+
+/* ======================================
    ЗАПУСК
-========================= */
+====================================== */
 
 calculateWorldSize();
+
 updateCamera();
-requestAnimationFrame(gameLoop);
+
+requestAnimationFrame(
+gameLoop
+);
 
 window.addEventListener(
 "resize",
 () => {
+
   calculateWorldSize();
+
 });
+
 </script>
 
 </body>
